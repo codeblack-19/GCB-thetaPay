@@ -1,0 +1,37 @@
+<?php 
+
+    class Cryptography{
+        private $cipherMethod = 'aes-128-cbc-hmac-sha256';
+        private $secreteKey = '28e742c6077fb5a8e73c46633783d953';
+        private $iv = '7f321d7f52c06e73';
+
+        public function encryptData($data){
+            $cipher = openssl_encrypt($data, $this->cipherMethod, $this->secreteKey, 0, $this->iv);
+            return $cipher;
+        }
+
+        public function decryptData($data){
+            $plainText = openssl_decrypt($data, $this->cipherMethod, $this->secreteKey, 0, $this->iv);
+            return $plainText;
+        }
+
+        private function uniqidReal($lenght) {
+            // uniqid gives 13 chars, but you could adjust it to your needs.
+            if (function_exists("random_bytes")) {
+                $bytes = random_bytes(ceil($lenght / 2));
+            } elseif (function_exists("openssl_random_pseudo_bytes")) {
+                $bytes = openssl_random_pseudo_bytes(ceil($lenght / 2));
+            } else {
+                throw new Exception("no cryptographically secure random function available");
+            }
+            return substr(bin2hex($bytes), 0, $lenght);
+        }
+
+
+        public function generateId($lenght){
+            return $this->uniqidReal($lenght);
+        }
+
+    }
+
+?>
