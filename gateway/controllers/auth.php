@@ -59,7 +59,7 @@
         }else if($account->createAccount()){
             $link = 'http://localhost'.$_SERVER["REQUEST_URI"].'/auth/verifyAccount?email='.$account->email.'&signature='.$account->authToken.'';
             if($signUpmail->sendMail($account->email, $link)){
-                echo $account->user_id;
+                echo json_encode(array("user_id" => $account->id));
                 return;
             }else{
                 $account->pemDestroy();

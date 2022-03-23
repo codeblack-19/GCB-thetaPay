@@ -8,26 +8,21 @@
     // mailing variables
 
     class MailingService{
-        private $host = 'mail.saasfluxgh.com';
-        private $username = 'khodeblack@saasfluxgh.com';
-        private $password = "Idon'tknowit";
-        private $sender = 'khodeblack@saasfluxgh.com';
-
         public function sendMail($email, $link){
             $mail = new PHPMailer\PHPMailer\PHPMailer();
 
             //Server settings   
             // $mail->SMTPDebug = 1;               
             $mail->isSMTP();                                            //Send using SMTP
-            $mail->Host       = $this->host;                     //Set the SMTP server to send through
+            $mail->Host       = smtpHost;                     //Set the SMTP server to send through
             $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-            $mail->Username   = $this->username;                     //SMTP username
-            $mail->Password   = $this->password;                         //SMTP password
+            $mail->Username   = smtpUsername;                     //SMTP username
+            $mail->Password   = smtpPassword;                         //SMTP password
             $mail->SMTPSecure = 'ssl';                      //Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
             $mail->Port       = 465;                         //TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS` above
 
             //Recipients
-            $mail->setFrom( $this->sender, 'GCB-thetaPay');
+            $mail->setFrom('therence@saasfluxgh.com', 'GCB-thetaPay');
             $mail->addAddress($email); 
 
             
@@ -44,8 +39,6 @@
                             <p>Regards, <br/> Thetapay </p>";
 
             if(!$mail->send()){
-                echo $link;
-                echo $mail->ErrorInfo;
                 return false;
             }else{
                 return true;
