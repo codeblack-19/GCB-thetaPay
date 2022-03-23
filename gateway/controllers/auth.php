@@ -4,6 +4,7 @@
     require_once './models/account.php';
     require_once './helpers/validator.php';
     require_once './services/SendMail.php';
+    require_once './controllers/viewController.php';
     $baseName = '/auth';
 
     // signup customer
@@ -74,8 +75,34 @@
         }
     });
 
-    // login customer 
     // verify account
+    Route::base("$baseName/verifyAccount", function(){
+        if($_SERVER['REQUEST_METHOD'] != 'GET'){
+            http_response_code(400);
+            echo json_encode(array("error" => "Invalid request method"));
+            return;
+        }
+
+        // required query strings
+        // $requiredquery = array("email", "signature");
+        // $queryStrings = array();
+        // parse_str($_SERVER['QUERY_STRING'], $queryStrings);
+
+        // // validate req queries
+        // $validate = new Validator;
+        // $holdValues = $validate->validateBody($queryStrings, $requiredquery);
+        // if(!empty($holdValues)){
+        //     http_response_code(400);
+        //     echo json_encode($holdValues);
+        //     return;
+        // }
+
+
+        ViewController::CreateView('auth/verifyAccount');
+
+    });
+
+
     // request for verification token
     // get change password page
     // change password

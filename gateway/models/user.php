@@ -23,7 +23,15 @@
             $this->connect = $db_Object->connect();
         }
 
-        
+        // get user by email
+        function getuser_by_email(){
+            $query = "Select id, email, firstname, lastname, createdAT, updatedAT, authToken,  from users Where email = '$this->email'";
+            $result = mysqli_query($this->connect, $query);
+            $row = mysqli_fetch_assoc($result);
+
+            return $row;
+        }
+
         public function checkEmail(){
             $query = "Select * from users Where email = '$this->email'";
             $result = mysqli_query($this->connect, $query);
