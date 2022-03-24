@@ -35,6 +35,27 @@
                 return false;
             }
         }
+
+        public function verifyAccount(){
+            $query = "UPDATE accounts set status = 'verified' WHERE user_id='$this->user_id'";
+            $result = mysqli_query($this->connect, $query);
+            
+            echo mysqli_error($this->connect);
+
+            if($result){
+                return true;
+            }else{
+                return false;
+            }
+        }
+
+        public function getAccountbyUserId(){
+            $query = "Select balance, status from accounts Where user_id = '$this->user_id'";
+            $result = mysqli_query($this->connect, $query);
+            $row = mysqli_fetch_assoc($result);
+
+            return $row;
+        }
     }
 
 

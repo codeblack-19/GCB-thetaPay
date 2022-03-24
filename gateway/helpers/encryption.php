@@ -2,16 +2,17 @@
 
     class Cryptography{
         private $cipherMethod = 'aes-128-cbc-hmac-sha256';
-        private $secreteKey = '28e742c6077fb5a8e73c46633783d953';
+        private $secreteKey = '28e742c6077';
         private $iv = '7f321d7f52c06e73';
 
         public function encryptData($data){
             $cipher = openssl_encrypt($data, $this->cipherMethod, $this->secreteKey, 0, $this->iv);
-            return $cipher;
+            return base64_encode($cipher);
         }
 
         public function decryptData($data){
-            $plainText = openssl_decrypt($data, $this->cipherMethod, $this->secreteKey, 0, $this->iv);
+            $decode = base64_decode($data);
+            $plainText = openssl_decrypt($decode, $this->cipherMethod, $this->secreteKey, 0, $this->iv);
             return $plainText;
         }
 
@@ -30,6 +31,17 @@
 
         public function generateId($lenght){
             return $this->uniqidReal($lenght);
+        }
+
+        public function checkSignatureDate($signature){
+            $pain = $this->decryptData($signature);
+            $rawArray = json_decode($pain, true);
+
+            if($rawArray['edt'] <= date('Y/m/d H:i:s')){
+                return true;
+            }else{
+                return false;
+            }
         }
 
     }

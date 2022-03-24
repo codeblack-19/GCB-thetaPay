@@ -25,18 +25,59 @@
 
         // get user by email
         function getuser_by_email(){
-            $query = "Select id, email, firstname, lastname, createdAT, updatedAT, authToken,  from users Where email = '$this->email'";
+            $query = "Select id, email, firstname, lastname, createdAT, updatedAT, authToken from users Where email = '$this->email'";
             $result = mysqli_query($this->connect, $query);
             $row = mysqli_fetch_assoc($result);
 
             return $row;
         }
 
+        // check if email exist
         public function checkEmail(){
             $query = "Select * from users Where email = '$this->email'";
             $result = mysqli_query($this->connect, $query);
 
             if($result->num_rows > 0){
+                return true;
+            }else{
+                return false;
+            }
+        }
+
+        // change password
+        public function changepassword(){
+            $query = "UPDATE users set password = '$this->authToken' WHERE id='$this->password'";
+            $result = mysqli_query($this->connect, $query);
+            
+            echo mysqli_error($this->connect);
+
+            if($result){
+                return true;
+            }else{
+                return false;
+            }
+        }
+
+        public function deleteAuthToken(){
+            $query = "UPDATE users set authToken = null WHERE id='$this->id'";
+            $result = mysqli_query($this->connect, $query);
+            
+            echo mysqli_error($this->connect);
+
+            if($result){
+                return true;
+            }else{
+                return false;
+            }
+        }
+
+        public function updateAuthToken(){
+            $query = "UPDATE users set authToken = '$this->authToken' WHERE id='$this->id'";
+            $result = mysqli_query($this->connect, $query);
+            
+            echo mysqli_error($this->connect);
+
+            if($result){
                 return true;
             }else{
                 return false;

@@ -1,0 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&family=Oswald:wght@200&family=Ubuntu:wght@300&display=swap');
+
+:root{
+    --mC-blue : rgb(52, 92, 202);
+    --mC-gcb : rgb(255, 197, 42);
+    --mC-error : rgb(235, 52, 52);
+    --mC-success: rgb(46, 231, 46);
+    --mC-bg : rgba(160, 160, 160, 0.2);
+}
+
+#_message {
+    font-size: 18px;
+    padding: 5px 0;
+    margin: 5px 0;
+    font-family: 'Verdana', sans-serif;
+}
+
+#_message.error {
+    color: var(--mC-error);
+}
+
+#_message.success {
+    color: var(--mC-success);
+}
+
+.header1 {
+    background-color: rgb(52, 92, 202);
+    padding: 20px 13px;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.header1 .logo {
+    font-weight: bold;
+    font-size: 2.7rem;
+    font-family: 'Ubuntu', sans-serif;
+}
+
+.header1 .hashtag {
+    font-family: 'Oswald', sans-serif;
+    font-size: 22px;
+}

@@ -1,0 +1,149 @@
+
+*{
+    margin: 0;
+    padding: 0;
+}
+
+.header{
+    background-color: rgb(52, 92, 202);
+    padding: 20px 13px;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.header .logo{
+    font-weight: bold;
+    font-size: 2.7rem;
+    font-family: 'Ubuntu', sans-serif;
+}
+
+.header .hashtag{
+    font-family: 'Oswald', sans-serif;
+    font-size: 22px;
+}
+
+.content{
+    padding:  0 10px;
+    height: calc(100vh - 90px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #a0a0a033;
+}
+
+.paymentForm{
+    margin-top: 6rem;
+    width: 25rem;
+    box-shadow: 0 2px 10px #8080805e;
+    border-radius: 7px;
+    padding: 4%;
+    text-align: center;
+    background-color: white;
+}
+
+.paymentForm h4{
+    font-family: 'Open Sans', sans-serif;
+    color: rgb(52, 92, 202);
+    text-align: center;
+    margin: 0px 0px 15px;
+    font-size: 30px;
+}
+
+.paymentForm form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.paymentForm form input {
+    padding: 15px;
+    border: 2px solid rgba(52, 92, 202, 0.603);
+    margin: 0 0 10px;
+    border-radius: 7px;
+    transition: .5s;
+    font-size: 19px;
+}
+
+.paymentForm form input:focus {
+    border: 2px solid rgba(52, 92, 202, 0.911);
+    outline: none;
+}
+
+.paymentForm form input::placeholder {
+    font-size: 19px;
+}
+
+.paymentForm form .btns{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.paymentForm form .btns button{
+    padding: 8px 37px;
+    margin: 5px 2px 5px;
+    font-size: 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: .5s;
+}
+
+form .btns button:first-child{
+    border: 1px solid rgb(52, 92, 202);
+    background: rgb(52, 92, 202);
+    color: white;
+}
+
+form .btns button:first-child:hover {
+    background-color: white;
+    color: rgb(52, 92, 202);
+}
+
+form .btns button:nth-child(2){
+    border: 1px solid rgb(235, 52, 52);
+    background: rgb(235, 52, 52);
+    color: white;
+}
+
+form .btns button:nth-child(2):hover {
+    color: rgba(235, 52, 52);
+    background: white;
+}
+
+._error {
+    width: 25rem;
+    box-shadow: 0 2px 10px #8080805e;
+    border-radius: 7px;
+    padding: 10px;
+    margin: 8rem 0 0 0;
+    text-align: center;
+    background-color: white;
+}
+
+._error .error_mgs {
+    font-size: 20px;
+    color: rgb(235, 52, 52);
+    font-weight: bold;
+    font-family: 'Open Sans', sans-serif;
+    margin: 20px 0;
+}
+
+.error_mgs a {
+    text-decoration: none;
+    color: rgb(52, 92, 202);
+}
+
+@media (max-width: 450px){
+    .paymentForm,
+    ._error{
+        width: 90%;
+    }
+
+    .paymentForm form .btns button{
+        width: 100%;
+    }
+
+}
