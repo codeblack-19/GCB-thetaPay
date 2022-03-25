@@ -57,6 +57,14 @@
 
             return $row;
         }
+
+        public function findbySecreteKey(){
+            $query = "Select balance, status, accountNo, businessName, publicKey from accounts Where secreteKey = '$this->secreteKey'";
+            $result = mysqli_query($this->connect, $query);
+            $row = mysqli_fetch_assoc($result);
+
+            return $row;
+        }
     }
 
 
