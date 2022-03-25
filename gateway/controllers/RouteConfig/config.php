@@ -30,8 +30,9 @@
             $url =  self::getRoute();
 
             if($url == $route){
-                $middleware->__invoke();
-                $function->__invoke();
+                if($middleware){
+                    $function->__invoke();
+                }
             }
         }
 

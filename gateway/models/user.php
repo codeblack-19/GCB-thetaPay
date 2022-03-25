@@ -25,7 +25,7 @@
 
         // get user by email
         function getuser_by_email(){
-            $query = "Select id, email, firstname, lastname, createdAT, updatedAT, authToken from users Where email = '$this->email'";
+            $query = "Select id, email, firstname, lastname, password, createdAT, updatedAT, authToken from users Where email = '$this->email'";
             $result = mysqli_query($this->connect, $query);
             $row = mysqli_fetch_assoc($result);
 
@@ -46,12 +46,12 @@
 
         // change password
         public function changepassword(){
-            $query = "UPDATE users set password = '$this->authToken' WHERE id='$this->password'";
+            $query = "UPDATE users set password = '$this->password' WHERE id='$this->id'";
             $result = mysqli_query($this->connect, $query);
             
             echo mysqli_error($this->connect);
 
-            if($result){
+            if($result && $this->changeUpdateTime()){
                 return true;
             }else{
                 return false;
@@ -64,7 +64,7 @@
             
             echo mysqli_error($this->connect);
 
-            if($result){
+            if($result && $this->changeUpdateTime()){
                 return true;
             }else{
                 return false;
@@ -74,10 +74,8 @@
         public function updateAuthToken(){
             $query = "UPDATE users set authToken = '$this->authToken' WHERE id='$this->id'";
             $result = mysqli_query($this->connect, $query);
-            
-            echo mysqli_error($this->connect);
 
-            if($result){
+            if($result && $this->changeUpdateTime()){
                 return true;
             }else{
                 return false;
@@ -113,11 +111,20 @@
             $query = "DELETE FROM users WHERE id='$this->id'";
             $result = mysqli_query($this->connect, $query);
 
-            
-            echo mysqli_error($this->connect);
+            if($result && $this->changeUpdateTime()){
+                return true;
+            }else{
+                return false;
+            }
+        }
 
-            if($result === true){
-                return $this->id;
+        public function changeUpdateTime(){
+            $dt = date('Y/m/d H:i:s');
+            $query = "UPDATE users set updatedAT = '$dt' WHERE id='$this->id'";
+            $result = mysqli_query($this->connect, $query);
+
+            if($result){
+                return true;
             }else{
                 return false;
             }
