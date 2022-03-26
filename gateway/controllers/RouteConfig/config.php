@@ -7,8 +7,8 @@
             $url =  self::getRoute();
 
             if (!in_array($url, self::$validRoutes)) {
-                http_response_code(400);
-                echo 'invalid url';
+                http_response_code(404);
+                echo json_encode(array("error" => "Url not found"));
                 return;
             } else {
                 return 1;

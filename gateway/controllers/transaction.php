@@ -3,14 +3,15 @@
     require_once './controllers/RouteConfig/config.php';
     require_once './helpers/validator.php';
     require_once './models/transaction.php';
+    require_once './controllers/viewController.php';
 
     
-    $baseName = '/transaction';
+    $baseName = '/transactions';
 
     // initiate web payment
-    Route::base("$baseName/initiate-payment", function(){
+    Route::base("$baseName/initiate_payment", function(){
         $middleware = new Middleware;
-        if(!$middleware->verifyCSToken()){
+        if(!$middleware->verifySecreteKey()){
             return;
         }
 
@@ -41,16 +42,36 @@
 
         $txn = new Transaction;
         $txn->accountNo = $_GET['acct']['accountNo'];
-        $txn->description = $reqbody['description'];
-        $txn->amount = $reqbody['amount'];
         $txn->currency = $reqbody['currency'];
+        $txn->description = $reqbody['description'];
         $txn->webhook = $reqbody['webhook'];
-        $txn->status = 'pending';
+        $txn->status = 'initiated';
         $txn->type = 'webpayment';
-
+        $txn->convertAmt($reqbody['amount']);
+        $txn->txn_id = $txn->generateId(10);
+        $txn->txn_token = $txn->getTxnToken();
         
-
+        if($txn->saveInitPaymentTxn()){
+            $link = 'http://localhost/GCB-thetaPay/gateway/transactions/paymentpage?token='.$txn->txn_token.'';
+            echo json_encode(array("link"=> "$link", "message"=>"Payment initiated successfully"));
+            return;
+        }else{
+            http_response_code(500);
+            echo json_encode(array('error'=> 'An error occured please try again'));
+            return;
+        }
     });
 
+    // web Payment page
+    Route::base("$baseName/paymentpage", function(){
+        if($_SERVER['REQUEST_METHOD'] != 'GET'){
+            http_response_code(400);
+            echo json_encode(array("error" => "Invalid request method"));
+            return;
+        }
+
+        ViewController::CreateView("transactions/paymentpage");
+        return;
+    });
 
 ?>

@@ -11,6 +11,8 @@
                 }else if(empty($reqbody[$key])){
                     // check for null
                     $this->notInbody = array("error" => "$key cannot be null");
+                }else if($key == 'currency' && !in_array($reqbody[$key], array("GHS", "USD", "EUR"))){
+                    $this->notInbody = array("error" => "$reqbody[$key] => is not a supported currency in thetaPay");
                 }
             }
 
