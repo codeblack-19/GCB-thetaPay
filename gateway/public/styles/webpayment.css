@@ -87,11 +87,11 @@
     font-weight: bold;
 }
 
-.theta-to-theta,
+/* .theta-to-theta,
 .cardPayment{
     display: none;
     transition: .4s;
-}
+} */
 
 .theta-to-theta form {
     display: flex;
