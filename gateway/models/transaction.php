@@ -13,8 +13,10 @@
         public $currency;
         public $medium;
         public $accountNo;
+        public $recipient_acctNo;
         public $createdAt;
         public $updatedAt;
+        public $cardNo;
         public $connect;
 
         function __construct(){
@@ -36,10 +38,66 @@
             }
         }
 
+        // get txn by id
+        public function getTxnById(){
+            $query = "Select * from transactions Where id = '$this->txn_id'";
+            $result = mysqli_query($this->connect, $query);
+            $row = mysqli_fetch_assoc($result);
+
+            return $row;
+        }
+
+        // insert into transfer
+        public function insertIntoTransfer(){
+            $query = "INSERT INTO transfers (txnId, recipient_acctNo) VALUES ('$this->txn_id', '$this->recipient_acctNo')";
+            $result = mysqli_query($this->connect, $query);
+
+            if($result){
+                return true;
+            }else{
+                return false;
+            }
+        }
+
+        // update txn status
+        public function updateTxnStat(){
+            $query = "UPDATE transactions set status = '$this->status' WHERE id='$this->txn_id'";
+            $result = mysqli_query($this->connect, $query);
+
+            if($result && $this->chTxnUpTime()){
+                return true;
+            }else{
+                return false;
+            }
+        }
+
+        // update txn medium
+        public function updateTxnMedium(){
+            $query = "UPDATE transactions set medium = '$this->medium' WHERE id='$this->txn_id'";
+            $result = mysqli_query($this->connect, $query);
+
+            if($result && $this->chTxnUpTime()){
+                return true;
+            }else{
+                return false;
+            }
+        }
+
         public function getTxnToken(){
             $today = date('Y/m/d H:i:s');
             $body = array("txn_id" => $this->txn_id, "cdt" => $today, "edt" => date('Y/m/d H:i:s', strtotime( $today. " + 60 minute")));
             return $this->encryptData(json_encode($body));
+        }
+
+        public function decodeTxnToken(){
+            $decode = $this->decryptData($this->txn_token);
+            $rawArr = json_decode($decode, true);
+
+            if($rawArr){
+                return $rawArr;
+            }else{
+                return false;
+            }
         }
 
         public function convertAmt($amt){
@@ -52,6 +110,64 @@
             }
         }
 
+        public function chTxnUpTime(){
+            $dt = date('Y/m/d H:i:s');
+            $query = "UPDATE transactions set updatedAt = '$dt' WHERE id='$this->txn_id'";
+            $result = mysqli_query($this->connect, $query);
+
+            if($result){
+                return true;
+            }else{
+                return false;
+            }
+        }
+
+        // debit and credit accounts
+        public function creditAccount($amount, $accountNo){
+            $query = "UPDATE accounts set balance = (balance + $amount) WHERE accountNo ='$accountNo';";
+            $result = mysqli_query($this->connect, $query);
+
+            if($result){
+                return true;
+            }else{
+                return false;
+            }    
+        }
+
+        public function debitAccount($amount, $accountNo){
+            $query = "UPDATE accounts set balance = (balance - $amount) WHERE accountNo ='$accountNo';";
+            $result = mysqli_query($this->connect, $query);
+
+            if($result){
+                return true;
+            }else{
+                return false;
+            }
+        }
+
+        // send transaction info to webhook
+        public function sendRespondsToWebhook($url){
+            $data = array("txn_d" => $this->txn_id, "status" => $this->status, "date" => date('Y/m/d H:i:s'));
+            $ch = curl_init($url);
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+            curl_setopt($ch, CURLOPT_HTTPHEADER, 
+                array(
+                    'Content-Type: application/json',
+                    'Authorization: '.$this->publicKey.''
+                ) 
+            );
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            $result = curl_exec($ch);
+            curl_close($ch);
+
+            if($result){
+                return true;
+            }else{
+                return false;
+            }
+
+        }
     }
 
 ?>

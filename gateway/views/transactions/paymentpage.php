@@ -11,21 +11,30 @@
 <body>
     <?php require_once './public/templates/header1.php' ?>
     <main class="content">
-        <div class="choice_bx">
-            <h4>Finish Payment via: <span id="_pmethod"></span> </h4>
-            <div class="selections">
-                <div class="choice_wp">
-                    <div class="choice" id="thetaTotheta" onclick="displayInterForm()">
-                        <img src="../public/asserts/favicon.ico" />
-                        <p>theta-to-theta</p>
-                    </div>
-                    <div class="choice" id="bank_card" onclick="displayCardForm()">
-                        <img src="../public/asserts/visa_n.png" />
-                        <p>Credit Cards</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <?php 
+            if(isset($_GET['message'])){
+                echo '<div class="choice_bx">
+                        <h4>Finish Payment: <span id="amt">GH&#x20B5; '.number_format($_GET['amount'], 2,'.','') .'</span> </h4>
+                        <div class="selections">
+                            <div class="choice_wp">
+                                <div class="choice" id="thetaTotheta" onclick="displayInterForm()">
+                                    <img src="../public/asserts/favicon.ico" />
+                                    <p>theta-to-theta</p>
+                                </div>
+                                <div class="choice" id="bank_card" onclick="displayCardForm()">
+                                    <img src="../public/asserts/visa_n.png" />
+                                    <p>Credit Cards</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>';
+            }else{
+                echo '<div class="_error">
+                        <p class="error_mgs">'.$_GET["error"].'</p>
+                      </div>';
+            }
+        ?>
+        
     </main>
 </body>
 <script src="../public/js/jquery-3.6.0.min.js"></script>

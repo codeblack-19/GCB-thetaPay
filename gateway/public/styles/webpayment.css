@@ -52,6 +52,10 @@
     font-size: 25px;
 }
 
+.choice_bx h4 #amt{
+    color: var(--mC-blue);
+}
+
 .choice_bx .choice_wp{
     display: flex;
     flex-wrap: wrap;
@@ -101,7 +105,7 @@
 
 .theta-to-theta form input {
     padding: 15px;
-    border: 2px solid rgba(52, 92, 202, 0.603);
+    border: 1px solid rgba(52, 92, 202, 0.603);
     margin: 0 0 10px;
     border-radius: 7px;
     transition: .5s;
@@ -177,7 +181,7 @@ form .field-container input{
 }
 
 form input:focus {
-    border: 2px solid rgba(52, 92, 202, 0.911);
+    border: 1px solid rgba(52, 92, 202, 0.911);
     outline: none;
 }
 
@@ -208,6 +212,58 @@ form .btns button:nth-child(2):hover {
     background: white;
 }
 
+.verify_notice {
+    margin-top: 6rem;
+    width: 25rem;
+    box-shadow: 0 2px 10px #8080805e;
+    border-radius: 7px;
+    padding: 4%;
+    text-align: center;
+    background-color: white;
+}
+
+.verify_notice h3 {
+    font-family: 'Open Sans', sans-serif;
+    color: rgb(52, 92, 202);
+    text-align: center;
+    margin: 5px 0px 10px;
+    font-size: 30px;
+}
+
+.verify_notice .check {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    font-size: 80px;
+    font-weight: bold;
+    border: 5px solid #2ee72e;
+    border-radius: 50%;
+    color: #2ee72e;
+    margin: 15px auto;
+}
+
+.verify_notice .check span {
+    position: absolute;
+    top: -9px;
+    left: 20px;
+}
+
+.verify_notice a button {
+    padding: 8px 37px;
+    margin: 10px 0 5px;
+    font-size: 20px;
+    border: 1px solid rgb(52, 92, 202);
+    background: rgb(52, 92, 202);
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: .5s;
+}
+
+.verify_notice a button:hover {
+    background-color: white;
+    color: rgb(52, 92, 202);
+}
 
 
 ._error {
@@ -235,11 +291,12 @@ form .btns button:nth-child(2):hover {
 
 @media (max-width: 450px){
     .choice_bx,
+    .verify_notice,
     ._error{
         width: 90%;
     }
 
-    .theta-to-theta form .btns button {
+    form .btns button {
         width: 100%;
     }
 

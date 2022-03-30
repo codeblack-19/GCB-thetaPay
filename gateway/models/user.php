@@ -25,7 +25,7 @@
 
         // get user by email
         function getuser_by_email(){
-            $query = "Select id, email, firstname, lastname, password, createdAT, updatedAT, authToken from users Where email = '$this->email'";
+            $query = "Select id, email, firstname, lastname, password, createdAt, updatedAt, authToken from users Where email = '$this->email'";
             $result = mysqli_query($this->connect, $query);
             $row = mysqli_fetch_assoc($result);
 
@@ -82,6 +82,17 @@
             }
         }
 
+        public function checkTokenExistence($token){
+            $query = "Select * from users Where authToken = '$token'";
+            $result = mysqli_query($this->connect, $query);
+
+            if($result->num_rows > 0){
+                return true;
+            }else{
+                return false;
+            }
+        }
+
         public function saveData(){
             $this->id = $this->generateId(12);
             $today = date('Y/m/d H:i:s');
@@ -120,7 +131,7 @@
 
         public function changeUpdateTime(){
             $dt = date('Y/m/d H:i:s');
-            $query = "UPDATE users set updatedAT = '$dt' WHERE id='$this->id'";
+            $query = "UPDATE users set updatedAt = '$dt' WHERE id='$this->id'";
             $result = mysqli_query($this->connect, $query);
 
             if($result){

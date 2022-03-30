@@ -40,6 +40,25 @@
         public function verifyAccount(){
             $query = "UPDATE accounts set status = 'verified' WHERE user_id='$this->user_id'";
             $result = mysqli_query($this->connect, $query);
+
+            if($result){
+                return true;
+            }else{
+                return false;
+            }
+        }
+
+        public function getAcctById(){
+            $query = "Select balance, pinCode, status, accountNo, businessName, publicKey from accounts Where accountNo = '$this->accountNo'";
+            $result = mysqli_query($this->connect, $query);
+            $row = mysqli_fetch_assoc($result);
+
+            return $row;
+        }
+
+        public function changePinCode(){
+            $query = "UPDATE accounts set pinCode = '$this->pinCode' WHERE user_id='$this->user_id'";
+            $result = mysqli_query($this->connect, $query);
             
             echo mysqli_error($this->connect);
 
@@ -60,6 +79,22 @@
 
         public function findbySecreteKey(){
             $query = "Select balance, status, accountNo, businessName, publicKey from accounts Where secreteKey = '$this->secreteKey'";
+            $result = mysqli_query($this->connect, $query);
+            $row = mysqli_fetch_assoc($result);
+
+            return $row;
+        }
+
+        public function getSecretekey(){
+            $query = "Select secreteKey from accounts Where user_id = '$this->user_id'";
+            $result = mysqli_query($this->connect, $query);
+            $row = mysqli_fetch_assoc($result);
+
+            return $row;
+        }
+
+        public function getKeysByAcctNo(){
+            $query = "Select secreteKey, publicKey from accounts Where accountNo = '$this->accountNo'";
             $result = mysqli_query($this->connect, $query);
             $row = mysqli_fetch_assoc($result);
 

@@ -141,14 +141,14 @@ function submitCreditCard(e){
     }else if(FmBody.cardNo.length != 16){
         return setformMessage("error", "Card number must be 16 digits");
     }else if(FmBody.expiry_mm == ""){
-        return setformMessage("error", "Expiration month required")
+        return setformMessage("error", "Invalid Expiration month")
     }else if(FmBody.expiry_yy == ""){
         return setformMessage("error", "Expiration year required");
-    }else if(FmBody.expiry_mm.length != 2 || FmBody.expiry_yy.length != 2){
+    }else if(FmBody.expiry_mm.length > 2 || FmBody.expiry_yy.length > 2){
         return setformMessage("error", "Invalid Expiration month or year");
     }else if(FmBody.cvv == ""){
         return setformMessage("error", "CVV is required");
-    }else if(FmBody.cvv.length != 4){
+    }else if(FmBody.cvv.length != 3){
         return setformMessage("error", "Invalid cvv number");
     }else{
         $.ajax({

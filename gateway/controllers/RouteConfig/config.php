@@ -7,6 +7,7 @@
             $url =  self::getRoute();
 
             if (!in_array($url, self::$validRoutes)) {
+                header("Content-Type: application/json; charset=UTF-8");
                 http_response_code(404);
                 echo json_encode(array("error" => "Url not found"));
                 return;
@@ -25,16 +26,16 @@
             }
         }
 
-        public static function auth($route, $middleware, $function){
-            self::$validRoutes[] = $route;
-            $url =  self::getRoute();
+        // public static function auth($route, $middleware, $function){
+        //     self::$validRoutes[] = $route;
+        //     $url =  self::getRoute();
 
-            if($url == $route){
-                if($middleware){
-                    $function->__invoke();
-                }
-            }
-        }
+        //     if($url == $route){
+        //         if($middleware){
+        //             $function->__invoke();
+        //         }
+        //     }
+        // }
 
         private function getRoute(){
             $slit = explode('/GCB-thetaPay/gateway', $_SERVER['REQUEST_URI']);
