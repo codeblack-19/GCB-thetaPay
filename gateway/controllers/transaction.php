@@ -189,7 +189,7 @@
             http_response_code(400);
             echo json_encode(array("error" => "Insufficient balance "));
             return;
-        }else if($txn->creditAccount($txn_info['amount'], $txn_info['account']) && $txn->debitAccount($txn_info['amount'], $reqbody['accountNo']) && 
+        }else if($txn->creditAccount($txn_info['amount'], $txn_info['accountNo']) && $txn->debitAccount($txn_info['amount'], $reqbody['accountNo']) && 
             $txn->insertIntoTransfer()){
             $account1 = new Account;
             $account1->accountNo = $txn_info['accountNo'];

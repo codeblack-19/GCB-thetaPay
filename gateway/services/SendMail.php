@@ -17,12 +17,11 @@
             $mail->Host       = smtpHost;                     //Set the SMTP server to send through
             $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
             $mail->Username   = smtpUsername;                     //SMTP username
-            $mail->Password   = smtpPassword;                         //SMTP password
-            $mail->SMTPSecure = 'ssl';                      //Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
-            $mail->Port       = 465;                         //TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS` above
+            $mail->Password   = smtpPassword;               //Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
+            $mail->Port       = smtpPort;                         //TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS` above
 
             //Recipients
-            $mail->setFrom('therence@saasfluxgh.com', 'GCB-thetaPay');
+            $mail->setFrom(smtpSender, 'GCB-thetaPay');
             $mail->addAddress($email); 
 
             
@@ -38,6 +37,7 @@
                             <br/>
                             <p>Regards, <br/> Thetapay </p>";
 
+            
             if(!$mail->send()){
                 return false;
             }else{
@@ -55,12 +55,11 @@
             $mail->Host       = smtpHost;                     //Set the SMTP server to send through
             $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
             $mail->Username   = smtpUsername;                     //SMTP username
-            $mail->Password   = smtpPassword;                         //SMTP password
-            $mail->SMTPSecure = 'ssl';                      //Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
-            $mail->Port       = 465;                         //TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS` above
+            $mail->Password   = smtpPassword;             //Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
+            $mail->Port       = smtpPort;                         //TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS` above
 
             //Recipients
-            $mail->setFrom('therence@saasfluxgh.com', 'GCB-thetaPay');
+            $mail->setFrom(smtpSender, 'GCB-thetaPay');
             $mail->addAddress($email); 
 
             
@@ -82,5 +81,36 @@
                 return true;
             }
         }
+
+        // transaction notification
+        public function transactionNotify($user, $txn, $type){
+            $mail = new PHPMailer\PHPMailer\PHPMailer();
+
+            //Server settings   
+            // $mail->SMTPDebug = 1;               
+            $mail->isSMTP();                                            //Send using SMTP
+            $mail->Host       = smtpHost;                     //Set the SMTP server to send through
+            $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+            $mail->Username   = smtpUsername;                     //SMTP username
+            $mail->Password   = smtpPassword;             //Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
+            $mail->Port       = smtpPort;                         //TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS` above
+
+            //Recipients
+            $mail->setFrom(smtpSender, 'GCB-thetaPay');
+            $mail->addAddress($user['email']); 
+
+            
+            //Content
+            $mail->isHTML(true);                                  //Set email format to HTML
+            $mail->Subject = 'Transaction Notification on A\c No '.$txn['accountNo'].' - ThetaPay';
+            $mail->Body  = "";
+
+            if(!$mail->send()){
+                return false;
+            }else{
+                return true;
+            }
+        }
+
     }
 ?>
