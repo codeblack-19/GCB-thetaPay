@@ -1,0 +1,107 @@
+.ctb_bx{
+    width: 400px;
+    padding: 1rem;
+}
+
+.ctb_h2{
+    font-family: 'Open Sans', sans-serif;
+    font-size: 1.7rem;
+    font-weight: bold;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 5px;
+    background-color: var(--mainOrange);
+    /* color: var(--redShade); */
+}
+
+.ctb_h2 span{
+    margin-right: 10px;
+}
+
+.cpd_bx{
+    margin-top: 15px;
+}
+
+.cpd_crd_img{
+    height: 4rem;
+    background-position: center top;
+    background-size: cover;
+    background-repeat: no-repeat;
+    position: relative;
+    background-color: rgb(209, 209, 209);
+}
+
+.cpd_crd_text h4{
+    font-family: 'Lato', sans-serif;
+    font-size: .95rem;
+    font-weight: bold;
+}
+
+.del_cart_text {
+    font-family: 'Lato', sans-serif;
+    text-align: center;
+    color: rgb(224, 3, 3);
+}
+
+.del_cart_text span{
+    font-weight: bold;
+}
+
+.cpd_qty_price {
+    display: flex;
+    justify-content: space-between;
+}
+
+.cpd_qty_price p{
+    font-size: .85rem;
+    font-family: 'Nato Sans', sans-serif;
+}
+
+.cpd_qty_price p span{
+    font-weight: bold;
+    font-size: .9rem;
+}
+
+.cpd_ptotal{
+    text-align: center;
+}
+
+.cpd_ptotal span{
+    font-family: 'DM Sans', sans-serif;
+}
+
+.cpd_crd_btn{
+    background-color: var(--mainOrange);
+    color: white;
+    transition: .4s;
+}
+
+.cpd_crd_btn:hover{
+    background-color: rgb(10, 10, 10);
+    color: var(--mainOrange);
+}
+
+.cob_bx{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    margin: 10px auto 0px;
+    box-shadow: 0px -3px 12px -5px var(--mainOrange);
+    border: 2px solid var(--mainOrange);
+    border-radius: 10px 10px 0 0;
+    padding: 10px 5px;
+}
+
+.cob_bx p {
+    text-align: center;
+    font-family: 'DM Sans', sans-serif;
+    font-size: .99rem;
+}
+
+.cob_bx p span{
+    margin: 0 10px;
+    font-size: 1.5rem;
+}

@@ -1,0 +1,20 @@
+
+
+Error [2/10/2022, 7:01:38 PM]
+ 	 - ReferenceError: validationResult is not defined
+
+Error [2/10/2022, 10:09:45 PM]
+ 	 - SequelizeDatabaseError: Data too long for column 'name' at row 1
+
+Error [2/10/2022, 10:38:42 PM]
+ 	 - Error: WHERE parameter "id" has invalid "undefined" value
+
+Error [2/10/2022, 11:02:04 PM]
+ 	 - ReferenceError: Sequelize is not defined
+
+Error [2/12/2022, 1:10:34 PM]
+ 	 - SequelizeValidationError: notNull Violation: orders.shipping_address cannot be null,
+notNull Violation: orders.customer_id cannot be null
+
+Error [2/12/2022, 1:30:06 PM]
+ 	 - SequelizeValidationError: notNull Violation: order_detail.customer_id cannot be null

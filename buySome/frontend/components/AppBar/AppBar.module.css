@@ -1,0 +1,23 @@
+.bs_apb {
+    /* backdrop-filter: blur(10px); */
+    background-color: rgba(255, 255, 255, 0);
+    box-shadow: none;
+}
+
+.bs_apb_logo{
+    cursor: pointer;
+}
+
+.bs_apb_tb {
+    padding: 15px 54px;
+}
+
+.bs_apb_btn{
+    color: white;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: bold;
+}
+
+.bs_apb_btn:first-child{
+    border-right: 1px solid white !important;
+}

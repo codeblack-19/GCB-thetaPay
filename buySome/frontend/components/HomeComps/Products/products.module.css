@@ -1,0 +1,67 @@
+/* products bx */
+.pd_ctn {
+    padding: 2% 5%;
+}
+
+.pd_cd_hm {
+    overflow: hidden;
+}
+
+.pd_cd_img_bx {
+    height: 12rem;
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    position: relative;
+    background-color: rgb(209, 209, 209);
+}
+
+.pd_cd_price {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background-color: var(--mainOrange) !important;
+    color: rgb(10, 10, 10) !important;
+    padding: 5px;
+    font-family: 'Noto Sans', sans-serif;
+    font-weight: bold;
+    border-top-left-radius: 5px;
+}
+
+
+.pd_cd_text {
+    padding: 10px;
+}
+
+.pd_cd_name {
+    font-family: 'Lato', sans-serif;
+    font-size: 1.3rem;
+    font-weight: bold;
+}
+
+.pd_cd_desc {
+    font-size: .75rem;
+    width: 100%;
+    overflow: hidden;
+    min-height: 35px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.vIc_btn {
+    height: 2.25rem;
+    width: 160px;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    border-radius: 8px;
+    margin: .2rem auto 1.2rem;
+    background-color: rgb(10, 10, 10);
+    color: var(--mainOrange);
+    font-weight: bold;
+}
+
+.vIc_btn:hover {
+    background-color: var(--mainOrange);
+    color: rgb(10, 10, 10);
+}

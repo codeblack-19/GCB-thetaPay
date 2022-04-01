@@ -1,0 +1,137 @@
+.atc_btn{
+    height: 2.25rem;
+    width: 160px;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    border-radius: 8px;
+    margin: .2rem auto 1.2rem;
+    background-color: rgb(10, 10, 10);
+    color: var(--mainOrange);
+    font-weight: bold;
+}
+
+.atc_btn:hover{
+    background-color: var(--mainOrange);
+    color: rgb(10, 10, 10);
+}
+
+.atc_btn span{
+    margin-right: 10px;
+}
+
+.atc_md_bx{
+    /* min-height: 250px; */
+    background-color: whitesmoke;
+    border-radius: 8px;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    /* box-shadow: 0 2px 5px -1px var(--mainLightBlue2); */
+    padding: 2rem 2rem;
+}
+
+.atc_md_crt{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.atc_md_crt h4{
+    font-family: 'Open Sans', sans-serif;
+}
+
+.atc_nlg_h6{
+    font-family: 'Noto Sans', sans-serif;
+    font-weight: bold;
+    font-size: 17px;
+}
+
+.atc_nlg_btn_bx{
+    text-align: center;
+}
+
+.atc_nlg_btn{
+    margin: 10px 0 0;
+    background-color: var(--mainOrange);
+    color: white;
+}
+
+.atc_nlg_btn:hover{
+    background-color: rgb(10, 10, 10);
+}
+
+.ATC_form{
+    margin: 10px 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.ATC_form input{
+    border: none;
+    box-shadow: 0 0 2px -2px gray;
+    padding: 10px 15px;
+    margin-top: 10px;
+    width: 100%;
+    border-radius: 7px;
+    font-family: 'Noto sans', sans-serif;
+    font-size: 15px;
+    text-align: center;
+    transition: .4s;
+    box-shadow: 0 0 5px -1px rgb(158, 158, 158);
+}
+
+.ATC_form input:focus {
+    outline: none;
+}
+
+.ATC_form button{
+    border: none;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    border-radius: 8px;
+    margin: 0.5rem auto;
+    background-color: rgb(10, 10, 10);
+    color: var(--mainOrange);
+    font-weight: bold;
+    height: 2.25rem;
+    width: 80%;
+    cursor: pointer;
+    transition: .5s;
+    font-family: 'Open sans', sans-serif;
+    font-size: 17px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.ATC_form button:hover{
+    background-color: var(--mainOrange);
+    color: rgb(10, 10, 10);
+}
+
+._frm_erm,
+._frm_scm {
+    font-family: 'Noto Sans', sans-serif;
+    text-align: center;
+    font-weight: bold;
+    width: 100%;
+}
+
+._frm_erm {
+    color: red;
+}
+
+._frm_scm {
+    color: rgb(85, 141, 1);
+}
+
+@media(max-width: 570px) {
+    .atc_md_bx {
+        width: 90%;
+    }
+
+    .atc_nlg_h6 {
+        font-size: 20px;
+        margin: .5rem auto;
+    }
+}
