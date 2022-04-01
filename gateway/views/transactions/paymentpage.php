@@ -37,6 +37,5 @@
         
     </main>
 </body>
-<script src="../public/js/jquery-3.6.0.min.js"></script>
-<script src="../public/js/webpayment.js"></script>
+<?php require_once './public/templates/infooter.php' ?>
 </html>

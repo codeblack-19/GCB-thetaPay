@@ -1,4 +1,4 @@
-var formMessage, interForm, sbtBtn, cancelBtn, cardForm;
+var formMessage, interForm, sbtBtn, cancelBtn, cardForm, loader;
 var FmBody = {};
 
 
@@ -28,6 +28,10 @@ function displayCardForm(){
                     <div class="btns">
                         <button type="submit" id="submitBtn">Submit</button>
                         <button type="button" id="cancelBtn" onclick="resetPage()">Reset</button>
+                        <button class="btn btn-primary" type="button" disabled id="loader">
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            Processing...
+                        </button>
                     </div>
                 </form>
             </div>
@@ -48,6 +52,10 @@ function displayInterForm(){
                     <div class="btns">
                         <button type="submit" id="submitBtn">Submit</button>
                         <button type="button" id="cancelBtn" onclick="resetPage()">Reset</button>
+                        <button class="btn btn-primary" type="button" disabled id="loader">
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            Processing...
+                        </button>
                     </div>
                 </form>
             </div>
@@ -62,6 +70,7 @@ function setElements(){
     formMessage = document.getElementById("_message");
     sbtBtn = document.getElementById('submitBtn');
     cancelBtn = document.getElementById('cancelBtn');
+    loader = document.getElementById('loader');
 }
 
 // reset payment page
@@ -73,6 +82,7 @@ function resetPage(){
 const setformMessage = (type, message) => {
     formMessage.setAttribute("class", type);
     formMessage.innerText = message;
+    loader.style.display = "none";
     sbtBtn.style.display = "block";
     cancelBtn.style.display = "block";
 }
@@ -82,6 +92,7 @@ function submitInterForm(e){
     e.preventDefault();
     sbtBtn.style.display = "none";
     cancelBtn.style.display = "none";
+    loader.style.display = "block";
 
 
     FmBody['accountNo'] = interForm.elements['accountNo'].value;
@@ -126,6 +137,7 @@ function submitCreditCard(e){
     e.preventDefault();
     sbtBtn.style.display = "none";
     cancelBtn.style.display = "none";
+    loader.style.display = "block";
 
     FmBody['name'] = cardForm.elements['name'].value;
     FmBody['cardNo'] = cardForm.elements['cardnumber'].value;

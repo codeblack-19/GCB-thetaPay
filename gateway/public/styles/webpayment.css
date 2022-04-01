@@ -265,6 +265,10 @@ form .btns button:nth-child(2):hover {
     color: rgb(52, 92, 202);
 }
 
+#loader{
+    display: none;
+}
+
 
 ._error {
     width: 25rem;
