@@ -172,6 +172,7 @@
         $account->accountNo = $reqbody['accountNo'];
         $account->pinCode = (int)$reqbody['pinCode'];
         $accInfo = $account->getAcctById();
+        $mail = new MailingService;
 
         if(empty($accInfo)){
             http_response_code(400);
@@ -193,16 +194,19 @@
             $txn->insertIntoTransfer()){
             $account1 = new Account;
             $account1->accountNo = $txn_info['accountNo'];
+            $account1Info = $account1->getAcctById();
+            $accInfo = $account->getAcctById();
             $keys = $account1->getKeysByAcctNo();
             $txn->status = "success";
             $txn->publicKey = $txn->encryptData($keys['publicKey']);
             $txn->updateTxnStat();
             $txn->updateTxnMedium();
-            if($txn->sendRespondsToWebhook($txn_info['webhook'])){
+
+            if($txn->sendRespondsToWebhook($txn_info['webhook']) && $mail->transactionNotify($accInfo, $txn_info, 'Debit') && $mail->transactionNotify($account1Info, $txn_info, 'Credit')){
                 echo json_encode(array("message" => "Transactions completed successfully"));
                 return;
             }else{
-                $txn->debitAccount($txn_info['amount'], $txn_info['account']);
+                $txn->debitAccount($txn_info['amount'], $txn_info['accountNo']);
                 $txn->creditAccount($txn_info['amount'], $reqbody['accountNo']);
                 $txn->status = "failed";
                 $txn->updateTxnStat();
@@ -211,8 +215,10 @@
                 return;
             }
         }else{
-            $txn->debitAccount($txn_info['amount'], $txn_info['account']);
+            $txn->debitAccount($txn_info['amount'], $txn_info['accountNo']);
             $txn->creditAccount($txn_info['amount'], $reqbody['accountNo']);
+            $txn->status = "failed";
+            $txn->updateTxnStat();
             http_response_code(500);
             echo json_encode(array("error" => "An error occured please try again"));
             return;
@@ -284,6 +290,7 @@
         $card->txn_id = $txn_info['id'];
         $cardInfo = $card->getCardById();
         $cardCheck = !empty($cardInfo) ? $card->validateCardParam($cardInfo, $reqbody) : '';
+        $mail = new MailingService;
 
         if(empty($cardInfo)){
             http_response_code(400);
@@ -297,8 +304,9 @@
             $txn->status = "success";
             $txn->publicKey = $txn->encryptData($keys['publicKey']);
             $txn->updateTxnStat();
+            $accInfo = $account->getAcctById();
             $txn->updateTxnMedium();
-            if($txn->sendRespondsToWebhook($txn_info['webhook'])){
+            if($txn->sendRespondsToWebhook($txn_info['webhook']) && $mail->transactionNotify($accInfo, $txn_info, 'Credit')){
                 echo json_encode(array("message" => 'Transactions completed successfully '.$cardCheck.''));
                 return;
             }else{
