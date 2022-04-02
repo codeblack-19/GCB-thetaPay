@@ -1,0 +1,4 @@
+#important creds
+.env
+.config.json
+/node_modules
