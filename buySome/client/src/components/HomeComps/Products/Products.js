@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import styles from "./products.module.css";
-import { Grid, Paper, Skeleton, Typography } from '@mui/material'
+import { Grid, Paper, Skeleton } from '@mui/material'
 import React, { useContext } from 'react'
 import CartBtns from "./CartBtns";
 import Context from "../../../context_apis/ProductsContext";
@@ -30,9 +30,9 @@ export default function HomeProducts() {
                                 <div className={styles.pd_cd_text}>
                                     {
                                         prod ? (
-                                            <Typography component='p' noWrap className={styles.pd_cd_name} title={prod.name}>
+                                            <p className={styles.pd_cd_name} title={prod.name}>
                                                 {prod.name}
-                                            </Typography>
+                                            </p>
                                         ) : (
                                             <Skeleton animation="wave" variant="rectangular" style={{ height: '20px', width: '100%', marginBottom: '5px' }} />
                                         )
@@ -40,11 +40,11 @@ export default function HomeProducts() {
 
                                     {
                                         prod ? (
-                                            <Typography component='p' className={styles.pd_cd_desc}>
+                                            <p className={styles.pd_cd_desc}>
                                                 {prod.description}
-                                            </Typography>
+                                            </p>
                                         ) : (
-                                            <Skeleton animation="wave" variant="rectangular" style={{ height: '40px', width: '100%', marginBottom: '5px' }} />
+                                            <p animation="wave" variant="rectangular" style={{ height: '40px', width: '100%', marginBottom: '5px' }} />
                                         )
                                     }
                                 </div>

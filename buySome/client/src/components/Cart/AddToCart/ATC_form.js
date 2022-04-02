@@ -6,7 +6,7 @@ import useSessionStorage from '../../../libs/useSessionStorage';
 import {Context as prodContext} from '../../../context_apis/ProductsContext';
 import { Context as cartSizeCtx } from '../../../context_apis/CartSizeContext';
 
-export default function ATC_form({ product }) {
+export default function ATCForm({ product }) {
     const [error, seterror] = useState('');
     const [success, setsuccess] = useState('');
     const [loading, setloading] = useState(false);
@@ -24,7 +24,7 @@ export default function ATC_form({ product }) {
             return seterror("Invalid quantity");
         } else {
             await axios({
-                url: `${process.env.NEXT_PUBLIC_API_BASE_URL}/carts`,
+                url: `${process.env.REACT_APP_API_BASE_URL}/carts`,
                 method: 'POST',
                 data: {
                     product_id: product.id,
@@ -38,10 +38,10 @@ export default function ATC_form({ product }) {
                 cs_ctx.getCartSize();
                 return setsuccess(res.data.message);
             }).catch((e) => {
+                seterror('An error occured, please try again');
                 if (e.response.data) {
                     return seterror(e.response.data.error);
                 }
-                seterror('An error occured, please try again');
             })
         }
 

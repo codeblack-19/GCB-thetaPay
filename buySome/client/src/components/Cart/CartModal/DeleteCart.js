@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react'
 import Box from '@mui/material/Box';
 import { CircularProgress, IconButton, Typography } from '@mui/material';
-import { Edit, RemoveCircle, ShoppingCartRounded } from '@mui/icons-material';
+import { RemoveCircle, ShoppingCartRounded } from '@mui/icons-material';
 import Modal from '@mui/material/Modal';
 import styles from './Cartmodal.module.css';
 import styles_2 from '../AddToCart/ATC.module.css';

@@ -52,16 +52,14 @@
 .vIc_btn {
     height: 2.25rem;
     width: 160px;
-    padding-left: 1rem;
-    padding-right: 1rem;
-    border-radius: 8px;
-    margin: .2rem auto 1.2rem;
-    background-color: rgb(10, 10, 10);
-    color: var(--mainOrange);
+    margin: .2rem auto 1.2rem !important;
+    background-color: rgb(10, 10, 10) !important;
+    color: var(--mainOrange) !important;
     font-weight: bold;
+    transition: .4s;
 }
 
 .vIc_btn:hover {
-    background-color: var(--mainOrange);
-    color: rgb(10, 10, 10);
+    background-color: var(--mainOrange) !important;
+    color: rgb(10, 10, 10) !important;
 }

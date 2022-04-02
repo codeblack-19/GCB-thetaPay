@@ -9,7 +9,7 @@ export const ProductProvider = ({children}) => {
 
     const fetchProducts = async () => {
         setproducts([])
-        await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/products/`).then((res) => {
+        await axios.get(`${process.env.REACT_APP_API_BASE_URL}/products`).then((res) => {
             return setproducts(res.data)
         }).catch((e) => {
             console.log(e);

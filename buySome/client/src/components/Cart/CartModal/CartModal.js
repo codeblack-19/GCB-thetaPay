@@ -3,13 +3,14 @@ import React, { useContext, useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import Divider from '@mui/material/Divider';
-import { RemoveCircle, ShoppingCart } from '@mui/icons-material';
+import { ShoppingCart } from '@mui/icons-material';
 import Context from '../../../context_apis/CartBoxContext';
 import styles from './Cartmodal.module.css';
-import { Grid, IconButton, Paper, Typography } from '@mui/material';
+import { Grid, Paper, Typography } from '@mui/material';
 import EditCart from './EditCart';
 import axios from "axios";
 import DeleteCart from './DeleteCart';
+import CheckModal from '../../Checkout/CheckModal';
 
 export default function CartModal() {
     const { open, handleClose } = useContext(Context);
@@ -20,7 +21,7 @@ export default function CartModal() {
             let cus = JSON.parse(sessionStorage.getItem('bs_cus'))
             await axios({
                 method: 'GET',
-                url: `${process.env.NEXT_PUBLIC_API_BASE_URL}/carts/${cus.user.id}`,
+                url: `${process.env.REACT_APP_API_BASE_URL}/carts/${cus.user.id}`,
                 headers: {
                     'authorization': `Bearer ${cus.access_token}`
                 }
@@ -96,19 +97,24 @@ export default function CartModal() {
                             }
                         </Grid>
                     </div>
-                    <div className={styles.cob_bx}>
-                        <p> Total Amount: 
-                            <span>
-                                GH&#x20B5;{' '}
-                                {
-                                    cartprod.reduce((sum, prod) => {
-                                        return sum + (prod.product.price * prod.quantity)
-                                    }, 0.00).toFixed(2)
-                                }
-                            </span>
-                        </p>
-                        
-                    </div>
+                    {
+                        cartprod.length !== 0 ? (
+                            <div className={styles.cob_bx}>
+                                <p> Total Amount: 
+                                    <span>
+                                        GH&#x20B5;{' '}
+                                        {
+                                            cartprod.reduce((sum, prod) => {
+                                                return sum + (prod.product.price * prod.quantity)
+                                            }, 0.00).toFixed(2)
+                                        }
+                                    </span>
+                                </p>
+                                <CheckModal cartProds={cartprod} />
+                            </div>
+                        ) : ''
+                    }
+                    
                 </Box>
             </Drawer>
         </div>

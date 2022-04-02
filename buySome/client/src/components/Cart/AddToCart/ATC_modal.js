@@ -5,11 +5,11 @@ import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import styles from './ATC.module.css';
 import { ShoppingCart, ShoppingCartRounded } from '@mui/icons-material';
-import Link from 'next/link';
+import {Link} from 'react-router-dom';
 import useSessionStorage from '../../../libs/useSessionStorage';
-import ATC_form from './ATC_form';
+import ATCForm from './ATC_form';
 
-export default function ATC_Model({product}) {
+export default function ATCModel({product}) {
   const [open, setOpen] = React.useState(false);
   const customer = useSessionStorage('bs_cus');
   const handleOpen = () => setOpen(true);
@@ -37,13 +37,13 @@ export default function ATC_Model({product}) {
                   Please login to add product to cart
                 </Typography>
                 <div className={styles.atc_nlg_btn_bx}>
-                  <Link href={'/login'} passHref>
+                  <Link to={'/login'}>
                     <Button size='small' className={styles.atc_nlg_btn}>login</Button>
                   </Link>
                 </div>
               </>
             ) : (
-              <ATC_form product={product} />
+              <ATCForm product={product} />
             )
           }
         </Box>

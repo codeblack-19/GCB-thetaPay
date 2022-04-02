@@ -3,7 +3,7 @@ import { Button } from '@mui/material';
 import React, { useContext, useEffect, useState } from 'react'
 import Context from '../../../context_apis/ProductsContext';
 import { Context as cb_Ctx } from '../../../context_apis/CartBoxContext';
-import ATC_Model from '../../Cart/AddToCart/ATC_modal';
+import ATCModel from '../../Cart/AddToCart/ATC_modal';
 import styles from './products.module.css';
 
 export default function CartBtns({ prod }) {
@@ -46,7 +46,7 @@ export default function CartBtns({ prod }) {
                         </Button>
                     </div>
                 ) : (
-                    <ATC_Model product={prod} />
+                    <ATCModel product={prod} />
                 )
             }
         </>

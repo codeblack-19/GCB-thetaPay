@@ -1,64 +1,22 @@
 /* eslint-disable react/display-name */
 import styles from './AppBar.module.css';
-import Image from 'next/image';
-import { useRouter } from 'next/router';
-import Link from 'next/link'
-import React, { useEffect, useState } from 'react';
-import { AppBar, Toolbar, Menu, Badge, MenuItem, IconButton, Box, InputBase, Button, ButtonGroup } from '@mui/material';
+import {Link, useNavigate} from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { AppBar, Toolbar, Menu, Badge, MenuItem, IconButton, Box, Button, ButtonGroup } from '@mui/material';
 import { AccountCircle } from '@mui/icons-material';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import { styled, alpha } from '@mui/material/styles';
 import AppbarOperation from '../../VanillaJs/AppbarOps';
 import CartBadge from '../Cart/CartBadge/CartBadge';
 import useSessionStorage from '../../libs/useSessionStorage';
-
-const Search = styled('div')(({ theme }) => ({
-  position: 'relative',
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.white, 0.25),
-  '&:hover': {
-    backgroundColor: alpha(theme.palette.common.white, 0.35),
-  },
-  marginRight: theme.spacing(2),
-  marginLeft: 0,
-  width: '100%',
-  [theme.breakpoints.up('sm')]: {
-    marginLeft: theme.spacing(3),
-    width: 'auto',
-  },
-}));
-
-const SearchIconWrapper = styled('div')(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: '100%',
-  position: 'absolute',
-  pointerEvents: 'none',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-}));
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: 'inherit',
-  '& .MuiInputBase-input': {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create('width'),
-    width: '100%',
-    [theme.breakpoints.up('md')]: {
-      width: '25ch',
-    },
-  },
-}));
+import bslogo from '../../asserts/buysome1.png'
 
 export default function MainAppBar(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const customer = useSessionStorage('bs_cus');
-  const router = useRouter();
+  const navigate = useNavigate();
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -79,6 +37,11 @@ export default function MainAppBar(props) {
   const handleMobileMenuOpen = (event) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
+
+  const Logout = () => {
+    sessionStorage.removeItem('bs_cus');
+    window.location.reload();
+  }
 
   useEffect(() => {
     let mount = true
@@ -110,7 +73,7 @@ export default function MainAppBar(props) {
       onClose={handleMenuClose}
     >
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
-      <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
+      <MenuItem onClick={() => {Logout()}}>Logout</MenuItem>
     </Menu>
   );
 
@@ -168,24 +131,14 @@ export default function MainAppBar(props) {
 
   return (
     <Box sx={{ flexGrow: 1 }} >
-      <AppBar position="fixed" id="AppBar" className={styles.bs_apb}>
+      <AppBar position="fixed" id="AppBar" className={styles.bs_apb} style={{backgroundColor:'rgba(255, 255, 255, 0)', boxShadow: 'none'}} >
         <Toolbar className={styles.bs_apb_tb}>
-          <Image
-            src="/buysome1.png"
+          <img
+            src={bslogo}
             alt='logo' width="150px" height="40px"
             className={styles.bs_apb_logo}
-            onClick={() => { router.push('/') }}
+            onClick={() => { navigate('/') }}
           />
-
-          {/* <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ 'aria-label': 'search' }}
-            />
-          </Search> */}
 
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
@@ -207,11 +160,11 @@ export default function MainAppBar(props) {
                 </>
               ) : (
                 <ButtonGroup variant="text" aria-label="text button group">
-                  <Link href={'/login'} passHref>
-                    <Button className={styles.bs_apb_btn}>Login</Button>
+                  <Link to={'/login'} className={styles.bs_apb_btn}>
+                    <Button>Login</Button>
                   </Link>
-                  <Link href={'/signup'} passHref>
-                    <Button className={styles.bs_apb_btn}>Signup</Button>
+                  <Link to={'/signup'} className={styles.bs_apb_btn}>
+                    <Button>Signup</Button>
                   </Link>
                 </ButtonGroup>
               )

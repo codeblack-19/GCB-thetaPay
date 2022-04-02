@@ -12,7 +12,7 @@ export const CartSizeProvider = ({children}) => {
             let cus = JSON.parse(sessionStorage.getItem('bs_cus'))
             await axios({
                 method: 'GET',
-                url: `${process.env.NEXT_PUBLIC_API_BASE_URL}/carts/${cus.user.id}/count`,
+                url: `${process.env.REACT_APP_API_BASE_URL}/carts/${cus.user.id}/count`,
                 headers: {
                     'authorization': `Bearer ${cus.access_token}`
                 }

@@ -1,18 +1,15 @@
 .atc_btn{
     height: 2.25rem;
     width: 160px;
-    padding-left: 1rem;
-    padding-right: 1rem;
-    border-radius: 8px;
-    margin: .2rem auto 1.2rem;
-    background-color: rgb(10, 10, 10);
-    color: var(--mainOrange);
-    font-weight: bold;
+    border-radius: 8px !important;
+    margin: .2rem auto 1.2rem !important;
+    background-color: rgb(10, 10, 10) !important;
+    color: var(--mainOrange) !important;
 }
 
 .atc_btn:hover{
-    background-color: var(--mainOrange);
-    color: rgb(10, 10, 10);
+    background-color: var(--mainOrange) !important;
+    color: rgb(10, 10, 10) !important;
 }
 
 .atc_btn span{
@@ -42,8 +39,8 @@
 }
 
 .atc_nlg_h6{
-    font-family: 'Noto Sans', sans-serif;
-    font-weight: bold;
+    font-family: 'Noto Sans', sans-serif !important;
+    font-weight: bold !important;
     font-size: 17px;
 }
 
@@ -52,9 +49,9 @@
 }
 
 .atc_nlg_btn{
-    margin: 10px 0 0;
-    background-color: var(--mainOrange);
-    color: white;
+    margin: 10px 0 0 !important;
+    background-color: var(--mainOrange) !important;
+    color: white !important;
 }
 
 .atc_nlg_btn:hover{
