@@ -11,3 +11,72 @@
     background-color: rgb(10, 10, 10) !important;
     color: var(--mainOrange) !important;
 }
+
+.co_fm{
+    margin: 10px 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.co_fm h3{
+    text-align: center;
+    font-family: 'Open sans', sans-serif;
+    font-weight: bold;
+}
+
+.co_fm input {
+    border: none;
+    box-shadow: 0 0 2px -2px gray;
+    padding: 10px 15px;
+    margin-top: 10px;
+    width: 100%;
+    border-radius: 7px;
+    font-family: 'Noto sans', sans-serif;
+    font-size: 15px;
+    text-align: center;
+    transition: .4s;
+    box-shadow: 0 0 5px -1px rgb(158, 158, 158);
+}
+
+.co_fm input:focus {
+    outline: none;
+}
+
+.co_fm button {
+    border: none;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    border-radius: 8px;
+    margin: 0.7rem auto 0.1rem;
+    background-color: rgb(10, 10, 10);
+    color: var(--mainOrange);
+    height: 2.25rem;
+    /* width: 80%; */
+    cursor: pointer;
+    transition: .5s;
+    font-family: 'Open sans', sans-serif;
+    font-size: 15px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.co_fm button:hover {
+    background-color: var(--mainOrange);
+    color: rgb(10, 10, 10);
+}
+
+._frm_erm,
+._frm_scm {
+    font-family: 'Noto Sans', sans-serif;
+    text-align: center;
+    font-weight: bold;
+    width: 100%;
+}
+
+._frm_erm {
+    color: red;
+}
+
+._frm_scm {
+    color: rgb(85, 141, 1);
+}

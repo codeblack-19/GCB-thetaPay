@@ -136,7 +136,7 @@ exports.editOrder = () => {
         const {status} = req.body;
 
         try {
-            console.log(order_id, status);
+            // console.log(order_id, status);
 
             const order = await Orders.findByPk(order_id);
 

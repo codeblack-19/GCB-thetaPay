@@ -30,6 +30,14 @@ module.exports = {
           key: "id"
         }
       },
+      txd_id: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        references: {
+          model: "transactions",
+          key: "id"
+        }
+      },
       createdAt: Sequelize.DATE,
       updatedAt: Sequelize.DATE,
       deletedAt: Sequelize.DATE

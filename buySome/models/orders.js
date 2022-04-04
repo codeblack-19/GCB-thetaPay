@@ -23,6 +23,13 @@ module.exports = sequelize.define("orders", {
             model: "customers",
             key: "id"
         }
+    }, txd_id: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        references: {
+            model: "transactions",
+            key: "id"
+        }
     }
 }, {
     timestamps: true,

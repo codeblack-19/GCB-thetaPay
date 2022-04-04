@@ -65,3 +65,23 @@ exports.sysUser_mw = (role) => {
         }
     }
 }
+
+exports.paymenthook = () => {
+    return (req, res, next) => {
+        if (req.headers.authorization) {
+            let token = req.headers.authorization.split(' ')[1];
+            
+            if(process.env.ThetaPay_GATEWAY_PUBLIC_KEY != token){
+                return res.status(401).json({
+                    "error": "Invalid public key"
+                });
+            }else{
+                next()
+            }
+        } else {
+            return res.status(401).json({
+                "error": "Unauthorized"
+            });
+        }
+    }
+}
