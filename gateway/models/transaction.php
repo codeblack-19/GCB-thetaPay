@@ -31,6 +31,7 @@
             $query = "INSERT INTO transactions (id, status, amount, description, type, webhook, token, currency, accountNo,createdAt, updatedAt) VALUES ('$this->txn_id', '$this->status', $this->amount,'$this->description', '$this->type', '$this->webhook', '$this->txn_token', '$this->currency', $this->accountNo,'$today', '$today')";
             $result = mysqli_query($this->connect, $query);
 
+
             if($result){
                 return true;
             }else{
@@ -43,6 +44,15 @@
             $query = "Select * from transactions Where id = '$this->txn_id'";
             $result = mysqli_query($this->connect, $query);
             $row = mysqli_fetch_assoc($result);
+
+            return $row;
+        }
+
+        // get txn by accountNo
+        public function getTxnByAcctNo(){
+            $query = "Select * from transactions Where accountNo = '$this->accountNo'";
+            $result = mysqli_query($this->connect, $query);
+            $row = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
             return $row;
         }
@@ -82,6 +92,20 @@
                 return false;
             }
         }
+
+        // insert into transaction for topup
+        public function saveTopUpTxn(){
+            $today = date('Y/m/d H:i:s');
+            $query = "INSERT INTO transactions (id, status, amount, description, type, medium, currency, accountNo, createdAt, updatedAt) VALUES ('$this->txn_id', '$this->status', $this->amount,'$this->description', '$this->type', '$this->medium', '$this->currency', $this->accountNo,'$today', '$today')";
+            $result = mysqli_query($this->connect, $query);
+
+            if($result){
+                return true;
+            }else{
+                return false;
+            }
+        }
+
 
         public function getTxnToken(){
             $today = date('Y/m/d H:i:s');
@@ -147,14 +171,14 @@
 
         // send transaction info to webhook
         public function sendRespondsToWebhook($url){
-            $data = array("txn_d" => $this->txn_id, "status" => $this->status, "date" => date('Y/m/d H:i:s'));
+            $data = array("txn_id" => $this->txn_id, "status" => $this->status, "date" => date('Y/m/d H:i:s'));
             $ch = curl_init($url);
             curl_setopt($ch, CURLOPT_POST, 1);
             curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
             curl_setopt($ch, CURLOPT_HTTPHEADER, 
                 array(
                     'Content-Type: application/json',
-                    'Authorization: '.$this->publicKey.''
+                    'Authorization: Bearer '.$this->publicKey.''
                 ) 
             );
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);

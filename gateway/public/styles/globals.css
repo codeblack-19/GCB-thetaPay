@@ -18,6 +18,7 @@
     padding: 5px 0;
     margin: 5px 0;
     font-family: 'Verdana', sans-serif;
+    text-align: center;
 }
 
 #_message.error {
@@ -30,7 +31,7 @@
 
 .header1 {
     background-color: rgb(52, 92, 202);
-    padding: 20px 13px;
+    padding: 10px 13px;
     color: white;
     display: flex;
     justify-content: space-between;
@@ -42,9 +43,11 @@
     font-weight: bold;
     font-size: 2.7rem;
     font-family: 'Ubuntu', sans-serif;
+    margin: 0;
 }
 
 .header1 .hashtag {
     font-family: 'Oswald', sans-serif;
     font-size: 22px;
+    margin: 0;
 }

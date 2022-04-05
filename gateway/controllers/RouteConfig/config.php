@@ -25,18 +25,7 @@
                 $function->__invoke();
             }
         }
-
-        // public static function auth($route, $middleware, $function){
-        //     self::$validRoutes[] = $route;
-        //     $url =  self::getRoute();
-
-        //     if($url == $route){
-        //         if($middleware){
-        //             $function->__invoke();
-        //         }
-        //     }
-        // }
-
+        
         private function getRoute(){
             $slit = explode('/GCB-thetaPay/gateway', $_SERVER['REQUEST_URI']);
             $main = explode('?', $slit[1]);

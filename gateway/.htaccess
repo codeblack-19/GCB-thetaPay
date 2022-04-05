@@ -1,4 +1,9 @@
 RewriteEngine On
+
 RewriteCond %{HTTP:Authorization} ^(.*)
 RewriteRule .* - [e=HTTP_AUTHORIZATION:%1]
+
+RewriteCond %{THE_REQUEST} /([^.]+)\.php [NC]
+RewriteRule ^ /%1 [NC,L,R]
+
 RewriteRule ^([^/]+)/? index.php?url=$1 [L,QSA]

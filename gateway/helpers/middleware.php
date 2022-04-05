@@ -6,7 +6,7 @@
         public function verifyCSToken(){
             header("Content-Type: application/json; charset=UTF-8");
             if(isset($_SERVER['HTTP_AUTHORIZATION'])){
-                $token = explode(" ", $_SERVER['HTTP_AUTHORIZATION'])[1];
+                $token = explode(" ", $_SERVER['HTTP_AUTHORIZATION'])[1] ?? "";
 
                 // first find token in table before decoding
                 $_token = $this->checkTokenExistence($token);
@@ -42,7 +42,7 @@
 
         public function verifySecreteKey(){
             header("Content-Type: application/json; charset=UTF-8");
-            if(isset($_SERVER['HTTP_AUTHORIZATION'])){
+            if(isset($_SERVER['HTTP_AUTHORIZATION']) && !empty($_SERVER['HTTP_AUTHORIZATION'])){
                 $token = explode(" ", $_SERVER['HTTP_AUTHORIZATION'])[1];
                 $decode = $this->decryptData($token);
 

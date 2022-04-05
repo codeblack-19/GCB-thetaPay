@@ -1,0 +1,63 @@
+body::-webkit-scrollbar {
+    width: 3px;
+    background-color: rgb(10, 10, 10);
+}
+
+body::-webkit-scrollbar-thumb {
+    background-color: var(--mC-gcb);
+}
+
+.navbar-brand .logoName{
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: bolder;
+
+}
+
+nav .btn.signupbtn{
+    background-color: var(--mC-blue);
+    color: white;
+}
+
+.banner-text h1{
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: bold;
+}
+
+.banner-text h4{
+    font-style: italic;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.services{
+    margin-top: 4%;
+    margin-bottom: 3%;
+}
+
+.services h3{
+    font-family: 'Oswald', sans-serif;
+}
+
+.services h3::after{
+    content: '';
+    height: 1px;
+    width: 50%;
+    margin-top: 5px;
+    background-color: var(--mC-blue);
+    display: block;
+}
+
+.services .row .card{
+    margin-bottom: 5px;
+}
+
+.footer{
+    background-color: rgb(10, 10, 10);
+}
+
+.footer p{
+    padding: 15px 0;
+    margin: 0;
+    text-align: center;
+    font-family: 'Open Sans', sans-serif;
+    color: var(--mC-gcb);
+}

@@ -5,7 +5,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>thetaPay - Reset Password</title>
+    <link rel="stylesheet" href="../public/styles/globals.css">
     <link rel="stylesheet" href="../public/styles/auth.css">
+    <link rel="shortcut icon" href="../public/asserts/favicon.ico" type="image/x-icon">
     <?php require_once './public/templates/inheader.php' ?>
 </head>
 <body>

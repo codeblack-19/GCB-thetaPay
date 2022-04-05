@@ -396,7 +396,9 @@
             echo json_encode(array("error" => "This account is not verified"));
             return;
         }else if($user->updateAuthToken()){
-            echo json_encode($userInfo);
+            session_start();
+            $_SESSION["user_token"] = $userInfo['access_token'];
+            echo json_encode(array("message" => "succcess", "token" => $userInfo['access_token'] ));
             return;
         }
     });
@@ -420,6 +422,8 @@
         $user->id = $_GET['uid'];
 
         if($user->deleteAuthToken()){
+            session_start();
+            unset($_SESSION['user_token']);
             echo json_encode(array("message" => "logged out successfully"));
             return;
         }

@@ -210,6 +210,7 @@
                 $txn->creditAccount($txn_info['amount'], $reqbody['accountNo']);
                 $txn->status = "failed";
                 $txn->updateTxnStat();
+                $txn->sendRespondsToWebhook($txn_info['webhook']);
                 http_response_code(500);
                 echo json_encode(array("error" => "An error occured please try again"));
                 return;
@@ -219,6 +220,7 @@
             $txn->creditAccount($txn_info['amount'], $reqbody['accountNo']);
             $txn->status = "failed";
             $txn->updateTxnStat();
+            $txn->sendRespondsToWebhook($txn_info['webhook']);
             http_response_code(500);
             echo json_encode(array("error" => "An error occured please try again"));
             return;
@@ -300,6 +302,12 @@
             http_response_code(400);
             echo json_encode(array("error" => $cardCheck));
             return;
+        }else if($txn_info['amount'] > $cardInfo['balance']){
+            $txn->status = "failed";
+            $txn->updateTxnStat();
+            http_response_code(400);
+            echo json_encode(array("error" => "Insufficient balance on card"));
+            return;
         }else if($card->debitACard($txn_info['amount']) && $card->creditAccount($txn_info['amount'], $txn_info['accountNo']) && $card->insertIntoCardPayment()){
             $txn->status = "success";
             $txn->publicKey = $txn->encryptData($keys['publicKey']);
@@ -307,13 +315,14 @@
             $accInfo = $account->getAcctById();
             $txn->updateTxnMedium();
             if($txn->sendRespondsToWebhook($txn_info['webhook']) && $mail->transactionNotify($accInfo, $txn_info, 'Credit')){
-                echo json_encode(array("message" => 'Transactions completed successfully '.$cardCheck.''));
+                echo json_encode(array("message" => 'Transactions completed successfully'));
                 return;
             }else{
                 $card->creditCard($txn_info['amount']);
                 $card->debitAccount($txn_info['amount'], $txn_info['accountNo']);
                 $txn->status = "failed";
                 $txn->updateTxnStat();
+                $txn->sendRespondsToWebhook($txn_info['webhook']);
                 http_response_code(500);
                 echo json_encode(array("error" => "An error occured please try again"));
                 return;
@@ -321,6 +330,9 @@
         }else{
             $card->creditCard($txn_info['amount']);
             $card->debitAccount($txn_info['amount'], $txn_info['accountNo']);
+            $txn->status = "failed";
+            $txn->updateTxnStat();
+            $txn->sendRespondsToWebhook($txn_info['webhook']);
             http_response_code(500);
             echo json_encode(array("error" => "An error occured please try again"));
             return;

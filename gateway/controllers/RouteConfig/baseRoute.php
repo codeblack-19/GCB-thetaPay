@@ -4,7 +4,8 @@
     require_once './controllers/auth.php';
     require_once './controllers/transaction.php';
     require_once './controllers/account.php';
-
+    require_once './controllers/client.php';
+    
     Route::base('/', function(){
         echo 'Api is up and running';
         return;
