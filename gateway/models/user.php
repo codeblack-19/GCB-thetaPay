@@ -140,6 +140,14 @@
                 return false;
             }
         }
+
+        public function getSettingDataById(){
+            $query = "SELECT a.accountNo, a.businessName, a.secreteKey, a.publicKey, u.firstname, u.lastname, u.phone, u.email FROM users u, accounts a WHERE a.user_id = u.id AND u.id = '$this->id'";
+            $result = mysqli_query($this->connect, $query);
+            $row = mysqli_fetch_assoc($result);
+
+            return $row;
+        }
     }
 
 ?>

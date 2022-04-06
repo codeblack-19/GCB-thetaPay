@@ -110,6 +110,14 @@
             return;
         }
 
+        $user = new User;
+        $decodetoken = json_decode($user->decryptData($_SESSION['user_token']), true);
+        $user->id = $decodetoken['uid'];
+        $userInfo = $user->getSettingDataById();
+        $userInfo['secreteKey'] = $user->encryptData($userInfo['secreteKey']);
+        $userInfo['publicKey'] = $user->encryptData($userInfo['publicKey']);
+        $_GET['acct_data'] = $userInfo;
+
         ViewController::CreateView("client/settings");
     });
 

@@ -105,3 +105,13 @@ body::-webkit-scrollbar-thumb {
     color: rgba(10, 10, 10);
     width: 100%;
 }
+
+/* account settings */
+.acctSettings .pinfo form .asbtn_bx{
+    text-align: center;
+}
+.acctSettings .pinfo form button{
+    background-color: var(--mC-gcb);
+    color: rgba(10, 10, 10);
+    margin: 5px auto;
+}
