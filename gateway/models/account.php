@@ -109,6 +109,17 @@
 
             return $row;
         }
+
+        public function changebasicInfo(){
+            $query = "UPDATE users join accounts on users.id = accounts.user_id SET users.lastname='$this->lastname', users.firstname='$this->firstname', users.phone='$this->phone', accounts.businessName = '$this->businessName' WHERE users.id = '$this->user_id'";
+            $result = mysqli_query($this->connect, $query);
+
+            if($result){
+                return true;
+            }else{
+                return false;
+            }
+        }
     }
 
 

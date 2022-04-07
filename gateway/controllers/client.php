@@ -223,4 +223,53 @@
             return;
         }
     });
+
+    Route::base("$baseName/editInfo", function(){
+        $middleware = new Middleware;
+        if(!$middleware->verifyCSToken()){
+            return;
+        }
+
+        header("Content-Type: application/json; charset=UTF-8");
+        if($_SERVER['REQUEST_METHOD'] != 'POST'){
+            http_response_code(400);
+            echo json_encode(array("error" => "Invalid request method"));
+            return;
+        }
+
+        // expected body
+        $Requiredbody = array("firstname", "lastname", "phone");
+        $reqbody = json_decode(file_get_contents('php://input'), true);
+        if(!$reqbody){
+            http_response_code(400);
+            echo json_encode(array("error" => "Invalid request data"));
+            return;
+        }
+
+        //validate request body
+        $checkValues = new Validator;
+        $holdChecks = $checkValues->validateBody($reqbody, $Requiredbody);
+        if(!empty($holdChecks)){
+            http_response_code(400);
+            echo json_encode($holdChecks);
+            return;
+        }
+
+        $account = new Account;
+        $account->businessName = $reqbody['businessName'];
+        $account->phone = $reqbody['phone'];
+        $account->firstname = $reqbody['firstname'];
+        $account->lastname = $reqbody['lastname'];
+        $account->user_id = $_GET['uid'];
+
+        if($account->changebasicInfo()){
+            echo json_encode(array("message" => "Information updated succesfully"));
+            return;
+        }else{
+            http_response_code(400);
+            echo json_encode(array("error" => "An error occured please try again"));
+            return;
+        }
+
+    });
 ?>

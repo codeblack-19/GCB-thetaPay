@@ -408,6 +408,8 @@
         
         $middleware = new Middleware;
         if(!$middleware->verifyCSToken()){
+            session_start();
+            unset($_SESSION['user_token']);
             return;
         }
 

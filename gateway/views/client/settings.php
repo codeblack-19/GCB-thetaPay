@@ -56,21 +56,9 @@
                                         <label class="form-label" for="phone">Phone</label>
                                     </div>
                                 </div>
-                                <!-- <div class="col-md-6 mb-3">
-                                    <div class="form-outline">
-                                        <input type="password" id="password" minlength="8" class="form-control form-control-lg" name="password" />
-                                        <label class="form-label" for="password">Password</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <div class="form-outline">
-                                        <input type="password" id="pinCode" maxlength="6" class="form-control form-control-lg" name="pinCode" />
-                                        <label class="form-label" for="pinCode">Pin Code</label>
-                                    </div>
-                                </div> -->
                                 <div class="col-md-12 mb-3">
                                     <div class="form-outline">
-                                        <input type="text" id="businessName" maxlength="6" class="form-control form-control-lg" name="businessName" value="<?php echo $_GET['acct_data']['businessName'] ?>" />
+                                        <input type="text" id="businessName" maxlength="100" class="form-control form-control-lg" name="businessName" value="<?php echo $_GET['acct_data']['businessName'] ?>" />
                                         <label class="form-label" for="pinCode">Business Name</label>
                                     </div>
                                 </div>
@@ -79,6 +67,8 @@
                             <div class="asbtn_bx">
                                 <button type="submit" id="submitBtn" class="btn acctSettingbtns">Save Changes</button>
                                 <button type="button" id="chPassBtn" class="btn acctSettingbtns">Change Password</button>
+                                <?php require_once '_changePin.php' ?>
+                                <!-- <button type="button" id="chPinBtn" class="btn acctSettingbtns">Change Pin Code</button> -->
                             </div>
                         </form>
                     </div>
@@ -116,4 +106,31 @@
 <?php require_once './public/templates/infooter.php'?>
 <script src="../public/js/jquery-3.6.0.min.js"></script>
 <script src="../public/js/acctSettings.js" class="<?php echo $_SESSION["user_token"] ?? ""; ?>" ></script>
+<script>
+    $(document).ready(() => {
+        var logoutbtn = document.getElementById("logoutBtn");
+
+        logoutbtn?.addEventListener("click", () => {
+
+            $.ajax({
+                type: "PUT",
+                processData: false,
+                contentType: "application/json; charset=utf-8",
+                cache: false,
+                url: "/GCB-thetaPay/gateway/auth/logout",
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
+                    xhr.setRequestHeader('Authorization', "Bearer <?php echo $_SESSION["user_token"] ?? ""; ?>");
+                },
+                dataType: 'json',
+                success: function (res) {
+                    location.reload();
+                }, error: function (XMLHttpRequest){
+                    console.log(XMLHttpRequest.responseJSON.error);
+                    location.reload();
+                }
+            });
+        })
+    })
+</script>
 </html>

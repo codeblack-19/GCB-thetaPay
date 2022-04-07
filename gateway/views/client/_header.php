@@ -48,7 +48,7 @@
                         <?php 
                             if(!isset($_SESSION["user_token"])){
                                 echo ' <a href="/GCB-thetaPay/gateway/client/login" class="btn btn-link px-3 me-2"> Login </a>
-                                        <a href="/GCB-thetaPay/gateway/client/signup" class="btn signupbtn me-3"> Sign up</a>';
+                                        <a href="/GCB-thetaPay/gateway/client/signup" class="btn btn-warning me-3"> Sign up</a>';
                             }else{
                                 echo '<a href="/GCB-thetaPay/gateway/client/topup" class="btn btn-light px-3 me-3"> Top up </a>
                                 <a id="logoutBtn" class="btn btn-dark px-3 me-2"> logout </a>';

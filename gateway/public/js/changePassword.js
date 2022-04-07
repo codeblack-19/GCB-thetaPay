@@ -54,7 +54,7 @@ $(document).ready(() => {
                     <div class="verify_notice">
                         <h3>Password Changed Succesfully</h3>
                         <p class="check"><span>&#10003;</span></p>
-                        <a href="/GCB-thetaPay/gateway">
+                        <a href="/GCB-thetaPay/gateway/client">
                             <button>Go To Portal</button>
                         </a>
                     </div>

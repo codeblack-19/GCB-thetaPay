@@ -58,11 +58,11 @@
                     <div class="d-flex align-items-center">
                         <?php 
                             if(!isset($_SESSION["user_token"])){
-                                echo ' <a href="/GCB-thetaPay/gateway/client/login" class="btn btn-link px-3 me-2"> Login </a>
-                                        <a href="/GCB-thetaPay/gateway/client/signup" class="btn signupbtn me-3"> Sign up</a>';
+                                echo ' <a href="/GCB-thetaPay/gateway/client/login" class="btn btn-link px-3 me-2 text-dark"> Login </a>
+                                        <a href="/GCB-thetaPay/gateway/client/signup" class="btn btn-warning me-3"> Sign up</a>';
                             }else{
-                                echo '<a id="logoutBtn" class="btn btn-link px-3 me-2"> logout </a>
-                                    <a href="/GCB-thetaPay/gateway/client/dashboard" class="btn signupbtn me-3"> Dashboard</a>';
+                                echo '<a id="logoutBtn" class="btn btn-link px-3 me-2 text-dark"> logout </a>
+                                    <a href="/GCB-thetaPay/gateway/client/dashboard" class="btn btn-warning me-3"> Dashboard</a>';
                             }
                         
                         ?>
@@ -166,6 +166,7 @@
                     location.reload();
                 }, error: function (XMLHttpRequest){
                     console.log(XMLHttpRequest.responseJSON.error);
+                    location.reload();
                 }
             });
         })
