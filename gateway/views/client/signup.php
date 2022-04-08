@@ -59,7 +59,7 @@
                 </button>
             </form>
             <div class="othbtns">
-                <a class="btn btn-link px-3 me-2">forgot password?</a>
+                <?php require_once '_forgotpassword.php' ?>
                 <a href="/GCB-thetaPay/gateway/client/login" class="btn btn-link px-3 me-2">login</a>
                 <a href="/GCB-thetaPay/gateway/client" class="btn btn-link px-3 me-2">Back to Home</a>
             </div>
@@ -68,6 +68,7 @@
 </body>
 <?php require_once './public/templates/infooter.php' ?>
 <script src="../public/js/jquery-3.6.0.min.js"></script>
+<script src="../public/js/forgotpassword.js"></script>
 <script>
     $(document).ready(() => {
         var lg_fm = document.getElementById("lg_fm");

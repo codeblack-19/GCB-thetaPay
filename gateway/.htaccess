@@ -6,4 +6,6 @@ RewriteRule .* - [e=HTTP_AUTHORIZATION:%1]
 RewriteCond %{THE_REQUEST} /([^.]+)\.php [NC]
 RewriteRule ^ /%1 [NC,L,R]
 
+RewriteRule ^client/public(/.*)?$ /GCB-thetaPay/gateway/public$1 [L,NC,R=302]
+
 RewriteRule ^([^/]+)/? index.php?url=$1 [L,QSA]

@@ -29,7 +29,7 @@
         private function getRoute(){
             $slit = explode('/GCB-thetaPay/gateway', $_SERVER['REQUEST_URI']);
             $main = explode('?', $slit[1]);
-            return $main[0];
+            return rtrim($main[0], "/");
         }
 
     }
