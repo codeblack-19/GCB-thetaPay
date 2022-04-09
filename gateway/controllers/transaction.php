@@ -52,8 +52,9 @@
         $txn->txn_token = $txn->getTxnToken();
         
         if($txn->saveInitPaymentTxn()){
+            $today = date('Y/m/d H:i:s');
             $link = 'http://localhost/GCB-thetaPay/gateway/transactions/paymentpage?signature='.$txn->txn_token.'';
-            echo json_encode(array("link"=> "$link", "message"=>"Payment initiated successfully", "txn_id" => "$txn->txn_id"));
+            echo json_encode(array("link"=> "$link", "message"=>"Payment initiated successfully", "txn_id" => "$txn->txn_id", "edt" => date('Y/m/d H:i:s', strtotime( $today. " + 60 minute"))));
             return;
         }else{
             http_response_code(500);

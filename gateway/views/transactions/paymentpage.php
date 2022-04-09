@@ -5,9 +5,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>thetaPay - Payment Portal</title>
-    <link rel="stylesheet" href="./public/styles/globals.css">
+    <link rel="stylesheet" href="../public/styles/globals.css">
     <?php require_once './public/templates/inheader.php' ?>
     <link rel="stylesheet" href="../public/styles/webpayment.css">
+    <link rel="shortcut icon" href="../public/asserts/favicon.ico" type="image/x-icon">
 </head>
 <body>
     <?php require_once './public/templates/header1.php' ?>
@@ -39,6 +40,6 @@
     </main>
 </body>
 <?php require_once './public/templates/infooter.php' ?>
-<script src="./public/js/jquery-3.6.0.min.js"></script>
+<script src="../public/js/jquery-3.6.0.min.js"></script>
 <script src="../public/js/webpayment.js"></script>
 </html>
