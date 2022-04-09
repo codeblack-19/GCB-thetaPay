@@ -192,6 +192,15 @@
             }
 
         }
+
+        // get all user transactions
+        public function getTxnForAdmin(){
+            $query = "SELECT u.firstname, u.lastname, t.* FROM users u, transactions t, accounts a WHERE u.id = a.user_id AND a.accountNo = t.accountNo;";
+            $result = mysqli_query($this->connect, $query);
+            $row = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+            return $row;
+        }
     }
 
 ?>

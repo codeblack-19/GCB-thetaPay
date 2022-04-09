@@ -82,30 +82,5 @@
 <?php require_once './public/templates/infooter.php'?>
 <script src="../public/js/jquery-3.6.0.min.js"></script>
 <script src="../public/js/dashboard.js" class="<?php echo $_SESSION["user_token"] ?? ""; ?>" ></script>
-<script>
-    $(document).ready(() => {
-        var logoutbtn = document.getElementById("logoutBtn");
-
-        logoutbtn?.addEventListener("click", () => {
-
-            $.ajax({
-                type: "PUT",
-                processData: false,
-                contentType: "application/json; charset=utf-8",
-                cache: false,
-                url: "/GCB-thetaPay/gateway/auth/logout",
-                beforeSend: function (xhr) {
-                    xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
-                    xhr.setRequestHeader('Authorization', "Bearer <?php echo $_SESSION["user_token"] ?? ""; ?>");
-                },
-                dataType: 'json',
-                success: function (res) {
-                    location.reload();
-                }, error: function (XMLHttpRequest){
-                    console.log(XMLHttpRequest.responseJSON.error);
-                }
-            });
-        })
-    })
-</script>
+<script src="../public/js/logout.js"></script>
 </html>

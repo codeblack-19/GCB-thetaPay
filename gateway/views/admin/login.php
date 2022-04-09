@@ -1,13 +1,3 @@
-
-<?php 
-    session_start(); 
-    
-    if(isset($_SESSION["user_token"])){
-        header('location: /GCB-thetaPay/gateway/client');
-        return;
-    }
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,7 +13,7 @@
 <body>
     <main class="">
         <div class="fm_bx">
-            <h3>Login to Portal</h3>
+            <h3>Login as Admin</h3>
             <form id="lg_fm">
                 <p id="_message"></p>
                 <div class="form-outline">
@@ -41,7 +31,6 @@
             <div class="othbtns">
                 <!-- <a class="btn btn-link px-3 me-2">forgot password?</a> -->
                 <?php require_once './public/templates/_forgotpassword.php' ?>
-                <a href="/GCB-thetaPay/gateway/client/signup" class="btn btn-link px-3 me-2">sign up</a>
                 <a href="/GCB-thetaPay/gateway/client" class="btn btn-link px-3 me-2">Back to Home</a>
             </div>
         </div>
@@ -73,14 +62,14 @@
                 processData: false,
                 contentType: "application/json; charset=utf-8",
                 cache: false,
-                url: "/GCB-thetaPay/gateway/auth/login_ct",
+                url: "/GCB-thetaPay/gateway/auth/login_ad",
                 data: JSON.stringify({email, password}),
                 dataType: 'json',
                 success: function (res) {
                     lg_fm.reset();
                     setInterval(() => {   
                         setformMessage("success", "Authenticated successfully");
-                        window.location.href = "/GCB-thetaPay/gateway/client"
+                        window.location.href = "/GCB-thetaPay/gateway/admin"
                     }, 1000);
                 }, error: function (XMLHttpRequest){
                     setformMessage("error", XMLHttpRequest.responseJSON.error)

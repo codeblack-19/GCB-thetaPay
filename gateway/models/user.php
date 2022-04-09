@@ -12,9 +12,8 @@
         public $id;
         public $phone;
         public $createdAt;
-        public $updatedAt;
-        public $deletedAt;
         public $connect;
+        public $bankNo = bankNumber;
 
 
         function __construct(){
@@ -25,7 +24,7 @@
 
         // get user by email
         function getuser_by_email(){
-            $query = "Select id, email, firstname, lastname, password, createdAt, updatedAt, authToken from users Where email = '$this->email'";
+            $query = "Select * from users Where email = '$this->email'";
             $result = mysqli_query($this->connect, $query);
             $row = mysqli_fetch_assoc($result);
 
@@ -51,7 +50,7 @@
             
             echo mysqli_error($this->connect);
 
-            if($result && $this->changeUpdateTime()){
+            if($result){
                 return true;
             }else{
                 return false;
@@ -64,7 +63,7 @@
             
             echo mysqli_error($this->connect);
 
-            if($result && $this->changeUpdateTime()){
+            if($result){
                 return true;
             }else{
                 return false;
@@ -75,7 +74,7 @@
             $query = "UPDATE users set authToken = '$this->authToken' WHERE id='$this->id'";
             $result = mysqli_query($this->connect, $query);
 
-            if($result && $this->changeUpdateTime()){
+            if($result){
                 return true;
             }else{
                 return false;
@@ -96,7 +95,7 @@
         public function saveData(){
             $this->id = $this->generateId(12);
             $today = date('Y/m/d H:i:s');
-            $query = "INSERT INTO users (id, firstname, lastname, password, email, phone, authToken, createdAt, updatedAt) VALUES ('$this->id', '$this->firstname', '$this->lastname','$this->password', '$this->email', '$this->phone', '$this->authToken','$today', '$today')";
+            $query = "INSERT INTO users (id, firstname, lastname, password, email, phone, authToken, createdAt) VALUES ('$this->id', '$this->firstname', '$this->lastname','$this->password', '$this->email', '$this->phone', '$this->authToken','$today')";
             $result = mysqli_query($this->connect, $query);
 
             if($result === true){
@@ -122,18 +121,6 @@
             $query = "DELETE FROM users WHERE id='$this->id'";
             $result = mysqli_query($this->connect, $query);
 
-            if($result && $this->changeUpdateTime()){
-                return true;
-            }else{
-                return false;
-            }
-        }
-
-        public function changeUpdateTime(){
-            $dt = date('Y/m/d H:i:s');
-            $query = "UPDATE users set updatedAt = '$dt' WHERE id='$this->id'";
-            $result = mysqli_query($this->connect, $query);
-
             if($result){
                 return true;
             }else{
@@ -148,6 +135,15 @@
 
             return $row;
         }
+
+        public function getAdminSummary(){
+            $query = "SELECT c.balance, (SELECT SUM(transactions.amount) FROM transactions) as txn_amt, (SELECT COUNT(*) from transactions) as txn_num, (SELECT COUNT(*) from users WHERE users.role = 'customer') as num_cus FROM cards c WHERE c.bankAcct_No = '$this->bankNo'";
+            $result = mysqli_query($this->connect, $query);
+            $row = mysqli_fetch_assoc($result);
+
+            return $row;
+        }
+
     }
 
 ?>

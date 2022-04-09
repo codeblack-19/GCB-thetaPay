@@ -395,9 +395,73 @@
             http_response_code(401);
             echo json_encode(array("error" => "This account is not verified"));
             return;
+        }else if($userInfo['role'] != 'customer'){
+            http_response_code(401);
+            echo json_encode(array("error" => "Admins are not allow here"));
+            return;
         }else if($user->updateAuthToken()){
             session_start();
             $_SESSION["user_token"] = $userInfo['access_token'];
+            echo json_encode(array("message" => "succcess", "token" => $userInfo['access_token'] ));
+            return;
+        }
+    });
+
+    // login admin
+    Route::base("$baseName/login_ad", function(){
+        header("Content-Type: application/json; charset=UTF-8");
+
+        // expected body
+        $Requiredbody = array("email", "password");
+        if($_SERVER['REQUEST_METHOD'] != 'POST'){
+            http_response_code(400);
+            echo json_encode(array("error" => "Invalid request method"));
+            return;
+        }
+
+        $reqbody = json_decode(file_get_contents('php://input'), true);
+        if(!$reqbody){
+            http_response_code(400);
+            echo json_encode(array("error" => "Invalid request data"));
+            return;
+        }
+
+        // validate request body
+        $checkValues = new Validator;
+        $holdChecks = $checkValues->validateBody($reqbody, $Requiredbody);
+        if(!empty($holdChecks)){
+            http_response_code(400);
+            echo json_encode($holdChecks);
+            return;
+        }
+
+        $user = new User;
+        $user->email = $reqbody['email'];
+        $userInfo = $user->getuser_by_email();
+
+        if(empty($userInfo)){
+            http_response_code(400);
+            echo json_encode(array("error" => "Invalid Email address or Email does not exist"));
+            return;
+        }else if(!password_verify($reqbody['password'], $userInfo['password'])){
+            http_response_code(400);
+            echo json_encode(array("error" => "Invalid Password"));
+            return;
+        }
+
+        $user->id = $userInfo['id'];
+        $user->authToken = $user->generateLoginToken($userInfo['id']);
+        $userInfo['access_token'] = $user->authToken;
+        unset($userInfo['password']);
+        unset($userInfo['authToken']);
+
+        if($userInfo['role'] == 'customer'){
+            http_response_code(401);
+            echo json_encode(array("error" => "You are not authorized to access this area"));
+            return;
+        }else if($user->updateAuthToken()){
+            session_start();
+            $_SESSION["admin_token"] = $userInfo['access_token'];
             echo json_encode(array("message" => "succcess", "token" => $userInfo['access_token'] ));
             return;
         }
@@ -410,6 +474,7 @@
         if(!$middleware->verifyCSToken()){
             session_start();
             unset($_SESSION['user_token']);
+            unset($_SESSION['admin_token']);
             return;
         }
 
@@ -426,6 +491,7 @@
         if($user->deleteAuthToken()){
             session_start();
             unset($_SESSION['user_token']);
+            unset($_SESSION['admin_token']);
             echo json_encode(array("message" => "logged out successfully"));
             return;
         }

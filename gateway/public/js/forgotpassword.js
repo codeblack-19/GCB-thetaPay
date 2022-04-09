@@ -20,11 +20,8 @@ $(document).ready(function () {
             url: "/GCB-thetaPay/gateway/auth/resetpassword",
             dataType: 'json',
             success: function (res) {
+                chfgPsFm.reset();
                 setformMessage2("text-success text-center", res.message);
-                setTimeout(() => {
-                    setformMessage2("", "");
-                    location.reload();
-                }, 2000)
             },
             error: function (XMLHttpRequest) {
                 setformMessage2("text-danger text-center", XMLHttpRequest.responseJSON.error);

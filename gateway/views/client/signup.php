@@ -59,7 +59,7 @@
                 </button>
             </form>
             <div class="othbtns">
-                <?php require_once '_forgotpassword.php' ?>
+                <?php require_once './public/templates/_forgotpassword.php' ?>
                 <a href="/GCB-thetaPay/gateway/client/login" class="btn btn-link px-3 me-2">login</a>
                 <a href="/GCB-thetaPay/gateway/client" class="btn btn-link px-3 me-2">Back to Home</a>
             </div>

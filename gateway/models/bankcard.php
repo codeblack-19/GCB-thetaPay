@@ -7,6 +7,8 @@
         public $cvv;
         public $expiry_mm;
         public $expiry_yy;
+        public $bankAcct_No;
+        public $bankName;
         public $connect;
 
         function __construct(){
