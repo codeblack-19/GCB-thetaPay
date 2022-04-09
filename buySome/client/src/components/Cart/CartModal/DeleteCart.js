@@ -32,7 +32,7 @@ export default function DeleteCart({ prodInfo, reFetchData }) {
         seterror('');
 
         await axios({
-            url: `${process.env.NEXT_PUBLIC_API_BASE_URL}/carts/${prodInfo.id}`,
+            url: `${process.env.REACT_APP_API_BASE_URL}/carts/${prodInfo.id}`,
             method: 'DELETE',
             headers: {
                 'Authorization': `Bearer ${customer.access_token}`

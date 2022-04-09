@@ -7,29 +7,12 @@ import styles from '../styles/Home.module.css'
 import Context from '../context_apis/CartSizeContext'
 import CartModal from '../components/Cart/CartModal/CartModal'
 import { Helmet } from 'react-helmet'
-import axios from 'axios'
 
 export default function Home() {
   const cartContext = useContext(Context);
 
-  const testAPi = async () => {
-    await axios({
-      url: `${process.env.REACT_APP_GCB_THETAPAY_API}/`,
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        "Authorization": `Bearer ${process.env.REACT_APP_GCB_THETAPAY_SECRETEKEY}`,
-      },
-    }).then((res) => {
-      console.log(res.data);
-    }).catch((e) => {
-      console.log(e);
-    })
-  }
-
   useEffect(() => {
     cartContext.getCartSize();
-    testAPi();
   },[])
   
   return (

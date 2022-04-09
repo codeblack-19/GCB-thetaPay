@@ -11,12 +11,13 @@ export default function CheckModal({cartProds}) {
     const [error, seterror] = useState('');
     const [success, setsuccess] = useState('');
     const [loading, setloading] = useState(false);
-    const [txn_id, settxn_id] = useState("");
+    const [txn_id, settxn_id] = useState(localStorage.getItem("_txnId") ? JSON.parse(localStorage.getItem("_txnId")).txn_id : "");
     const [order, setorderinfo] = useState({
-        order_email: "",
+        order_email: localStorage.getItem("_txnId") ? JSON.parse(localStorage.getItem("_txnId")).email : "",
         billing_info: "GCB-thetaPay",
-        shipping_address: "",
-        order_details: []
+        shipping_address: localStorage.getItem("_txnId") ? JSON.parse(localStorage.getItem("_txnId")).shipping_address : "",
+        order_details: [],
+        txn_id: localStorage.getItem("_txnId") ? JSON.parse(localStorage.getItem("_txnId")).txn_id : ""
     });
 
     const [txnInfo, settxnInfo] = useState({
@@ -83,7 +84,7 @@ export default function CheckModal({cartProds}) {
             }).then((res) => {
                 let txn = res.data;
                 settxn_id(txn.txn_id);
-                localStorage.setItem("_txnId", txn.txn_id);
+                localStorage.setItem("_txnId", JSON.stringify({txn_id: txn.txn_id, email: order.order_email, shipping_address: order.shipping_address}));
                 window.open(txn.link, "_blank").focus();
                 return checkTxnStatus();
             }).catch((e) => {
@@ -101,6 +102,7 @@ export default function CheckModal({cartProds}) {
         cartProds.forEach((prod) => {
             tmp['order_details'].push(prod.id);
         });
+        tmp['txn_id'] = JSON.parse(localStorage.getItem("_txnId")).txn_id;
         setorderinfo(tmp);
 
         let user = JSON.parse(sessionStorage.getItem('bs_cus'))
@@ -112,21 +114,22 @@ export default function CheckModal({cartProds}) {
                 "Authorization": `Bearer ${user.access_token}`,
             },
         }).then((res) => {
-            setsuccess('Checkout Completed');
             localStorage.removeItem("_txnId");
-            handleClose();
+            setsuccess(res.data.message);
+            // window.location.reload();
         }).catch((e) => {
             seterror('An error occured, please try again');
             if (e.response.data) {
+                localStorage.removeItem("_txnId");
                 return seterror(e.response.data.error);
             }
         })
     } 
 
     const checkTxnStatus = async () => {
-        let user = JSON.parse(sessionStorage.getItem('bs_cus'))
+        let user = JSON.parse(sessionStorage.getItem('bs_cus'));
         await axios({
-            url: `${process.env.REACT_APP_API_BASE_URL}/transactions/${txn_id}`,
+            url: `${process.env.REACT_APP_API_BASE_URL}/transactions/${JSON.parse(localStorage.getItem("_txnId")).txn_id}`,
             method: 'GET',
             headers: {
                 "Authorization": `Bearer ${user.access_token}`,
@@ -135,13 +138,23 @@ export default function CheckModal({cartProds}) {
             if(res.data){
                 if(res.data.status === 'success'){
                     return placeOrder();
-                }else{
+                }else if(res.data.status === 'failed'){
                     seterror('Checkout Transaction failed');
+                    localStorage.removeItem('_txnId');
+                }else{
+                    setTimeout(() => {
+                        checkTxnStatus()
+                    }, 2000)
                 }
+            }else{
+                setTimeout(() => {
+                    checkTxnStatus()
+                }, 2000)
             }
         }).catch((e) => {
             seterror('An error occured, please try again');
             if (e.response.data) {
+                localStorage.removeItem("_txnId");
                 return seterror(e.response.data.error);
             }
         })
@@ -183,12 +196,18 @@ export default function CheckModal({cartProds}) {
                                     ) : ''
                                 }
 
-                                <input type='email' autoComplete='off' required={true} name='order_email' placeholder='Email' onChange={(e) => dataSetter(e)}/>
-                                <input type='text' autoComplete='off' required={true} name='shipping_address' placeholder='Shipping Address' onChange={(e) => dataSetter(e)}/>
-                                
-                                <button type='submit' disabled={loading ? true : false}>
-                                    Initiate Payment
-                                </button>
+                                {
+                                    !success ? (
+                                        <>
+                                            <input type='email' autoComplete='off' required={true} name='order_email' placeholder='Email' onChange={(e) => dataSetter(e)}/>
+                                            <input type='text' autoComplete='off' required={true} name='shipping_address' placeholder='Shipping Address' onChange={(e) => dataSetter(e)}/>
+                                            
+                                            <button type='submit' disabled={loading ? true : false}>
+                                                Initiate Payment
+                                            </button>
+                                        </>
+                                    ) : ""
+                                }
                             </>
                         )
                     }

@@ -65,7 +65,7 @@ export default function CartModal() {
                                 cartprod.map((prod, key) => {
                                     return (
                                         <Grid key={key} container item className={styles.cpd_card} lg={12} spacing={2} justifyContent='space-around'>
-                                            <Grid item lg={4}>
+                                            <Grid item xs={4} lg={4}>
                                                 <Paper className={styles.cpd_crd_img} style={{ backgroundImage: `url(${prod.product.image_url})` }}></Paper>
                                             </Grid>
                                             <Grid item className={styles.cpd_crd_text} lg={6}>
@@ -80,7 +80,7 @@ export default function CartModal() {
                                                     Total: <span>GH&#x20B5; {prod.product.price * prod.quantity}</span>
                                                 </p>
                                             </Grid>
-                                            <Grid container direction='row' item className={styles.cpd_crd_btns} lg={2} spacing={1}>
+                                            <Grid container direction='row' item className={styles.cpd_crd_btns} lg={2} spacing={1} justifyContent='center' >
                                                 <Grid item lg={12}>
                                                     <EditCart prodInfo={prod} reFetchData={getCartprod} />
                                                 </Grid>
@@ -88,7 +88,7 @@ export default function CartModal() {
                                                     <DeleteCart prodInfo={prod} reFetchData={getCartprod} />
                                                 </Grid>
                                             </Grid>
-                                            <Grid item lg={12}>
+                                            <Grid item xs={12}>
                                                 <Divider />
                                             </Grid>
                                         </Grid>

@@ -2,11 +2,9 @@
 import styles from './AppBar.module.css';
 import {Link, useNavigate} from 'react-router-dom';
 import React, { useEffect } from 'react';
-import { AppBar, Toolbar, Menu, Badge, MenuItem, IconButton, Box, Button, ButtonGroup } from '@mui/material';
+import { AppBar, Toolbar, Menu, MenuItem, IconButton, Box, Button, ButtonGroup } from '@mui/material';
 import { AccountCircle } from '@mui/icons-material';
 import MoreIcon from '@mui/icons-material/MoreVert';
-import MailIcon from '@mui/icons-material/Mail';
-import NotificationsIcon from '@mui/icons-material/Notifications';
 import AppbarOperation from '../../VanillaJs/AppbarOps';
 import CartBadge from '../Cart/CartBadge/CartBadge';
 import useSessionStorage from '../../libs/useSessionStorage';
@@ -94,38 +92,31 @@ export default function MainAppBar(props) {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem>
-        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} color="error">
-            <MailIcon />
-          </Badge>
-        </IconButton>
-        <p>Cart</p>
-      </MenuItem>
-      <MenuItem>
-        <IconButton
-          size="large"
-          aria-label="show 17 new notifications"
-          color="inherit"
-        >
-          <Badge badgeContent={17} color="error">
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
-        <p>My Account</p>
-      </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <AccountCircle />
-        </IconButton>
-        <p>Logout</p>
-      </MenuItem>
+      {
+        customer ? (
+                <div>
+                  <MenuItem>
+                    <p>Cart</p>
+                    <CartBadge customer={customer} />
+                  </MenuItem>
+                  <MenuItem>
+                    <p>My Account</p>
+                  </MenuItem>
+                  <MenuItem onClick={() => {Logout()}}>
+                    <p>Logout</p>
+                  </MenuItem>
+                </div>
+              ) : (
+                <div>
+                  <MenuItem>
+                    <p>Login</p>
+                  </MenuItem>
+                  <MenuItem onClick={() => {Logout()}}>
+                    <p>Sign up</p>
+                  </MenuItem>
+                </div>
+              )
+      }
     </Menu>
   );
 
