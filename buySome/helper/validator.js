@@ -83,8 +83,8 @@ exports.validateCusBody = (method) => {
                     .exists().withMessage('shipping info is required'),
                 body('order_details').isArray({min: 1}).withMessage('Cant checkout 0 products')
                     .exists().withMessage('Array of orders is required'),
-                body('order_details.*.cart_id').exists().withMessage('product id is required for all'),
-                
+                body('txn_id').isString().isLength({max: 255})
+                    .exists().withMessage('Transaction Id is required'),
             ]
         }
         case 'editOrderStatus' : {

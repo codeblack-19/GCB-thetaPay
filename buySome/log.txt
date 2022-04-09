@@ -18,3 +18,27 @@ notNull Violation: orders.customer_id cannot be null
 
 Error [2/12/2022, 1:30:06 PM]
  	 - SequelizeValidationError: notNull Violation: order_detail.customer_id cannot be null
+
+Error [4/9/2022, 7:32:43 AM]
+ 	 - SequelizeValidationError: notNull Violation: orders.txd_id cannot be null
+
+Error [4/9/2022, 8:14:19 AM]
+ 	 - SequelizeValidationError: notNull Violation: orders.txd_id cannot be null
+
+Error [4/9/2022, 8:20:03 AM]
+ 	 - SequelizeValidationError: notNull Violation: orders.txd_id cannot be null
+
+Error [4/9/2022, 8:20:11 AM]
+ 	 - SequelizeValidationError: notNull Violation: orders.txd_id cannot be null
+
+Error [4/9/2022, 8:52:45 AM]
+ 	 - SequelizeForeignKeyConstraintError: (conn=1430, no: 1452, SQLState: 23000) Cannot add or update a child row: a foreign key constraint fails (`buysome`.`orders`, CONSTRAINT `orders_ibfk_2` FOREIGN KEY (`txn_id`) REFERENCES `transactions` (`id`))
+sql: INSERT INTO `orders` (`id`,`status`,`order_email`,`shipping_address`,`customer_id`,`txn_id`,`createdAt`,`updatedAt`) VALUES (DEFAULT,?,?,?,?,?,?,?); - parameters:['pending','moda@gmail.com','Legon cites','3e331db7-dbb3-4022-a2b3-db5ed11df561','','2022-04-0...]
+
+Error [4/9/2022, 9:06:49 AM]
+ 	 - SequelizeForeignKeyConstraintError: (conn=1453, no: 1452, SQLState: 23000) Cannot add or update a child row: a foreign key constraint fails (`buysome`.`orders`, CONSTRAINT `orders_ibfk_2` FOREIGN KEY (`txn_id`) REFERENCES `transactions` (`id`))
+sql: INSERT INTO `orders` (`id`,`status`,`order_email`,`shipping_address`,`customer_id`,`txn_id`,`createdAt`,`updatedAt`) VALUES (DEFAULT,?,?,?,?,?,?,?); - parameters:['pending','magi@gmail.com','Linda - Sport','3e331db7-dbb3-4022-a2b3-db5ed11df561','','2022-04...]
+
+Error [4/9/2022, 9:20:00 AM]
+ 	 - SequelizeForeignKeyConstraintError: (conn=1480, no: 1452, SQLState: 23000) Cannot add or update a child row: a foreign key constraint fails (`buysome`.`orders`, CONSTRAINT `orders_ibfk_2` FOREIGN KEY (`txn_id`) REFERENCES `transactions` (`id`))
+sql: INSERT INTO `orders` (`id`,`status`,`order_email`,`shipping_address`,`customer_id`,`txn_id`,`createdAt`,`updatedAt`) VALUES (DEFAULT,?,?,?,?,?,?,?); - parameters:['pending','minsa@gmail.com','nima','3e331db7-dbb3-4022-a2b3-db5ed11df561','','2022-04-09 09:1...]

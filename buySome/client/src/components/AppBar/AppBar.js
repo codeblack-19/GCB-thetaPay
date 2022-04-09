@@ -70,7 +70,7 @@ export default function MainAppBar(props) {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <MenuItem onClick={() => {navigate("/myaccount")}}>My account</MenuItem>
       <MenuItem onClick={() => {Logout()}}>Logout</MenuItem>
     </Menu>
   );
@@ -99,7 +99,7 @@ export default function MainAppBar(props) {
                     <p>Cart</p>
                     <CartBadge customer={customer} />
                   </MenuItem>
-                  <MenuItem>
+                  <MenuItem onClick={() => {navigate("/myaccount")}}>
                     <p>My Account</p>
                   </MenuItem>
                   <MenuItem onClick={() => {Logout()}}>
@@ -108,10 +108,10 @@ export default function MainAppBar(props) {
                 </div>
               ) : (
                 <div>
-                  <MenuItem>
+                  <MenuItem onClick={() => {navigate("/login")}}>
                     <p>Login</p>
                   </MenuItem>
-                  <MenuItem onClick={() => {Logout()}}>
+                  <MenuItem onClick={() => navigate("/signup")}>
                     <p>Sign up</p>
                   </MenuItem>
                 </div>

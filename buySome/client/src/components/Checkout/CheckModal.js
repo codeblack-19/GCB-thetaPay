@@ -84,7 +84,14 @@ export default function CheckModal({cartProds}) {
             }).then((res) => {
                 let txn = res.data;
                 settxn_id(txn.txn_id);
-                localStorage.setItem("_txnId", JSON.stringify({txn_id: txn.txn_id, email: order.order_email, shipping_address: order.shipping_address}));
+                localStorage.setItem(
+                    "_txnId", JSON.stringify({
+                                txn_id: txn.txn_id, 
+                                email: order.order_email, 
+                                shipping_address: order.shipping_address,
+                                date: txn.edt
+                            })
+                );
                 window.open(txn.link, "_blank").focus();
                 return checkTxnStatus();
             }).catch((e) => {
@@ -128,6 +135,12 @@ export default function CheckModal({cartProds}) {
 
     const checkTxnStatus = async () => {
         let user = JSON.parse(sessionStorage.getItem('bs_cus'));
+        let exdt = JSON.parse(localStorage.getItem("_txnId")).edt
+        if((new Date(exdt)) < (new Date())){
+            localStorage.removeItem('_txnId');
+            return seterror('Checkout Transaction failed');
+        }
+
         await axios({
             url: `${process.env.REACT_APP_API_BASE_URL}/transactions/${JSON.parse(localStorage.getItem("_txnId")).txn_id}`,
             method: 'GET',

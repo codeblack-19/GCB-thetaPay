@@ -83,15 +83,24 @@ exports.checkout = () => {
             order_email,
             billing_info,
             shipping_address,
-            order_details
+            order_details,
+            txn_id
         } = req.body;
 
         try {
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                return res.status(400).json({
+                    error: errors.array()[0].msg
+                })
+            }
+
             const order = await Orders.create({
                 status: 'pending',
                 order_email,
                 billing_info,
                 shipping_address,
+                txn_id,
                 customer_id: res.locals.customerId
             })
 

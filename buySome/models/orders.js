@@ -23,7 +23,7 @@ module.exports = sequelize.define("orders", {
             model: "customers",
             key: "id"
         }
-    }, txd_id: {
+    }, txn_id: {
         type: Sequelize.STRING,
         allowNull: false,
         references: {
