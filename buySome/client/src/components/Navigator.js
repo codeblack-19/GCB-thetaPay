@@ -11,11 +11,11 @@ export default function Navigator() {
     const [user, setuser] = useState(sessionStorage.getItem('bs_cus') ? JSON.parse(sessionStorage.getItem('bs_cus')) : "");
 
     const PrivateRoute1 = ({ children }) => {
-        return user ? <Navigate to = "/" /> : children;
+        return user ? <Navigate to = "/"/> : children;
     }
 
     const PrivateRoute2 = ({ children }) => {
-        return user ? children : <Navigate to = "/login" />;
+        return sessionStorage.getItem('bs_cus') ? children : <Navigate to = "/login"/> ;
     }
 
     return (

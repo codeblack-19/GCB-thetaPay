@@ -1,5 +1,4 @@
 .holder{
-    background-color: var(--mainOrange);
     padding-top: 85px;
     padding-bottom: 50px;
 }
@@ -9,4 +8,20 @@
     padding-top: 10px;
     padding-bottom: 10px;
     border-radius: 10px;
+    box-shadow: 0 0 4px -1px gray;
+}
+
+.acct_header{
+    text-align: center;
+    font-family: 'Open Sans', sans-serif;
+    margin: 15px 0;
+    font-size: 27px;
+}
+
+.bs_apb_logo {
+    cursor: pointer;
+}
+
+.bs_apb{
+    background-color: var(--mainOrange) !important;
 }
