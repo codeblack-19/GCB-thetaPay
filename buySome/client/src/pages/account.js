@@ -5,7 +5,6 @@ import styles from '../styles/account.module.css';
 import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { Container, AppBar, Toolbar, IconButton } from '@mui/material';
 import bslogo from '../asserts/buysome1.png';
@@ -24,8 +23,8 @@ function TabPanel(props) {
       {...other}
     >
       {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
+        <Box sx={{ p: 0 }}>
+          {children}
         </Box>
       )}
     </div>
@@ -51,7 +50,7 @@ export default function Account() {
     const navigate = useNavigate();
 
     const handleChange = (event, newValue) => {
-        setValue(newValue);
+      setValue(newValue);
     };
 
     const LogoutUser = () => {
@@ -101,10 +100,10 @@ export default function Account() {
                         </Tabs>
                     </Box>
                     <TabPanel value={value} index={0}>
-                        <Userorders />
+                      <Userorders />
                     </TabPanel>
                     <TabPanel value={value} index={1}>
-                        Item Two
+                      User Profile 
                     </TabPanel>
                 </Box>
             </Container>  

@@ -1,5 +1,5 @@
 .holder{
-    padding-top: 85px;
+    padding-top: 45px;
     padding-bottom: 50px;
 }
 
@@ -8,7 +8,7 @@
     padding-top: 10px;
     padding-bottom: 10px;
     border-radius: 10px;
-    box-shadow: 0 0 4px -1px gray;
+    /* box-shadow: 0 0 4px -1px gray; */
 }
 
 .acct_header{
@@ -24,4 +24,38 @@
 
 .bs_apb{
     background-color: var(--mainOrange) !important;
+}
+
+.orderNo,
+.orderDetH,
+.orderDetProd{
+    font-family: 'Lato', sans-serif;
+}
+
+.orderDetH,
+.orderDetProd {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.orderDetBx h5{
+    font-family: 'DM Sans', sans-serif;
+    color: grey;
+}
+
+.orderDetBx p{
+    font-family: 'Nato Sans', sans-serif;
+}
+
+.pd_cd_img_bx {
+    height: 9rem;
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    position: relative;
+    background-color: rgb(209, 209, 209);
+}
+
+.pd_cd_name{
+    font-family: 'DM Sans', sans-serif;
 }
