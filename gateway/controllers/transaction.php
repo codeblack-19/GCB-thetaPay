@@ -374,6 +374,16 @@
             return;
         }
 
+        $txn = new Transaction;
+        $txn->txn_id = $reqbody['txn_id'];
+        $txnInfo = $txn->getTxnById();
 
+        if(empty($txnInfo)){
+            http_response_code(400);
+            echo json_encode(array("error" => 'No transaction with the ID = '.$reqbody['txn_id'].''));
+            return;
+        }
+
+        
     });
 ?>
