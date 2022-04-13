@@ -340,4 +340,40 @@
         }
         
     });
+
+
+    // refund payment
+    Route::base("$baseName/refund", function(){
+        $middleware = new Middleware;
+        if(!$middleware->verifySecreteKey()){
+            return;
+        }
+
+        header("Content-Type: application/json; charset=UTF-8");
+        if($_SERVER['REQUEST_METHOD'] != 'POST'){
+            http_response_code(400);
+            echo json_encode(array("error" => "Invalid request method"));
+            return;
+        }
+
+        // expected body
+        $Requiredbody = array("txn_id");
+        $reqbody = json_decode(file_get_contents('php://input'), true);
+        if(!$reqbody){
+            http_response_code(400);
+            echo json_encode(array("error" => "Invalid request data"));
+            return;
+        }
+
+        // validate request body
+        $checkValues = new Validator;
+        $holdChecks = $checkValues->validateBody($reqbody, $Requiredbody);
+        if(!empty($holdChecks)){
+            http_response_code(400);
+            echo json_encode($holdChecks);
+            return;
+        }
+
+
+    });
 ?>
