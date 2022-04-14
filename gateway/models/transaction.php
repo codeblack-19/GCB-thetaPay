@@ -201,6 +201,27 @@
 
             return $row;
         }
+
+        // get transfer txn by txnId
+        public function getTxnTransByTxnId(){
+            $query = "Select * from transfers Where txnId = '$this->txn_id'";
+            $result = mysqli_query($this->connect, $query);
+            $row = mysqli_fetch_assoc($result);
+
+            return $row;
+        }
+
+        // refund txn
+        public function refundTxn(){
+            $query = "UPDATE transactions set refunded = true WHERE id='$this->txn_id'";
+            $result = mysqli_query($this->connect, $query);
+
+            if($result && $this->chTxnUpTime()){
+                return true;
+            }else{
+                return false;
+            }
+        }
     }
 
 ?>

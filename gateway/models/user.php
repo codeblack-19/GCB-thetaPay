@@ -13,7 +13,7 @@
         public $phone;
         public $createdAt;
         public $connect;
-        public $bankNo = bankNumber;
+        public $bankNo = thetaBankNumber;
 
 
         function __construct(){

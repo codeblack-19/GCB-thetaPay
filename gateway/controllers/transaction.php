@@ -343,7 +343,7 @@
 
 
     // refund payment
-    Route::base("$baseName/refund", function(){
+    Route::base("$baseName/webpayment_refund", function(){
         $middleware = new Middleware;
         if(!$middleware->verifySecreteKey()){
             return;
@@ -382,8 +382,75 @@
             http_response_code(400);
             echo json_encode(array("error" => 'No transaction with the ID = '.$reqbody['txn_id'].''));
             return;
+        }else if($txnInfo['status'] != 'success' ){
+            http_response_code(400);
+            echo json_encode(array("error" => 'Cannot refund a transaction with status '.$txnInfo['status'].''));
+            return;
+        }else if($txnInfo['refunded'] == true){
+            http_response_code(400);
+            echo json_encode(array("error" => 'Transaction has been refunded already'));
+            return;
+        }else if($txnInfo['type'] == 'webpayment'){
+            $acct1 = new Account;
+            $acct1->accountNo = $txnInfo['accountNo'];
+            $acct1_info = $acct1->getAcctById();
+
+            if($acct1_info['balance'] < $txnInfo['amount']){
+                http_response_code(400);
+                echo json_encode(array("error" => 'Insuficient balance by to initiate refund'));
+                return;
+            }
+
+            if($txnInfo['medium'] == 'card'){
+                $card = new BankCard;
+                $cardpayment = $card->getCardPaymentByTxnId($reqbody['txn_id']);
+                $card->card_no = $cardpayment['card_no'] ?? 0 ;
+                $mail = new MailingService;
+
+                $acct1_info['balance'] = $acct1_info['balance'] - $txnInfo['amount'];
+                if(
+                    !empty($cardpayment) && 
+                    $card->creditCard($txnInfo['amount']) && 
+                    $txn->debitAccount($txnInfo['amount'], $txnInfo['accountNo']) &&
+                    $mail->transactionNotify($acct1_info, $txnInfo, 'Refund & Debit')
+                ){
+                    $txn->refundTxn();
+                    echo json_encode(array("message" => 'Transaction has been refunded successfully'));
+                    return;
+                }else{
+                    http_response_code(500);
+                    echo json_encode(array("error" => 'An error occured please try again'));
+                    return;
+                }
+            }else if($txnInfo['medium'] == 'internal'){
+                $txnTrans = $txn->getTxnTransByTxnId();
+                $acct2 = new Account;
+                $acct2->accountNo = $txnTrans['recipient_acctNo'] ?? 0;
+                $acct2_info = $acct2->getAcctById();
+                $mail = new MailingService;
+
+                $acct1_info['balance'] = $acct1_info['balance'] - $txnInfo['amount'];
+                $acct2_info['balance'] = $acct2_info['balance'] + $txnInfo['amount'];
+
+                if(
+                    !empty($txnTrans) &&
+                    $txn->debitAccount($txnInfo['amount'], $txnInfo['accountNo']) &&
+                    $txn->creditAccount($txnInfo['amount'], $acct2->accountNo) &&
+                    $mail->transactionNotify($acct1_info, $txnInfo, 'Refund & Debit') &&
+                    $mail->transactionNotify($acct2_info, $txnInfo, 'Refund & Credit')
+                ){
+                    $txn->refundTxn();
+                    echo json_encode(array("message" => 'Transaction has been refunded successfully'));
+                    return;
+                }else{
+                    http_response_code(500);
+                    echo json_encode(array("error" => 'An error occured please try again'));
+                    return;
+                }
+
+            }
+
         }
 
-        
     });
 ?>

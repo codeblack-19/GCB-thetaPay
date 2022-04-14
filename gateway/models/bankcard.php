@@ -82,6 +82,15 @@
                 return false;
             }
         }
+
+        // get card payment by txn_id
+        public function getCardPaymentByTxnId($txnId){
+            $query = "SELECT c.holder_name, c.balance, cp.txnId FROM cards c, card_payment cp, transactions t WHERE t.id = cp.txnId AND c.card_no = cp.card_no AND t.id = '$txnId'";
+            $result = mysqli_query($this->connect, $query);
+            $row = mysqli_fetch_assoc($result);
+
+            return $row;
+        }
     }
 
 ?>
