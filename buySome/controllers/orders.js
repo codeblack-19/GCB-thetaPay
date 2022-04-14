@@ -8,6 +8,7 @@ const {
 } = require('express-validator');
 const Carts = require('../models/carts');
 const Products = require('../models/products');
+const { refundTxn } = require('../services/thetaPayService');
 
 // relationship btn orders and order_details
 Orders.hasMany(OrderDetails, {
@@ -192,6 +193,19 @@ exports.revertOrder = () => {
             }
 
             // make refund api call
+            const refund = await refundTxn(order.txn_id)
+
+            if(refund != true){
+                if(refund === false){
+                    return res.status(400).json({
+                        error: `Order could not be refunded, please call service care`
+                    })
+                }else{
+                    return res.status(400).json({
+                        error: refund
+                    })
+                }
+            }
 
             const order_details = await OrderDetails.findAll({
                 where: {

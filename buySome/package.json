@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon app.js",
-    "build" : "cd client && npm install && npm run build"
+    "build": "cd client && npm install && npm run build"
   },
   "keywords": [
     "buysome"
@@ -14,6 +14,7 @@
   "author": "dannySunday",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.26.1",
     "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
     "dotenv": "^16.0.0",

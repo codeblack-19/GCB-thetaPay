@@ -42,3 +42,12 @@ sql: INSERT INTO `orders` (`id`,`status`,`order_email`,`shipping_address`,`custo
 Error [4/9/2022, 9:20:00 AM]
  	 - SequelizeForeignKeyConstraintError: (conn=1480, no: 1452, SQLState: 23000) Cannot add or update a child row: a foreign key constraint fails (`buysome`.`orders`, CONSTRAINT `orders_ibfk_2` FOREIGN KEY (`txn_id`) REFERENCES `transactions` (`id`))
 sql: INSERT INTO `orders` (`id`,`status`,`order_email`,`shipping_address`,`customer_id`,`txn_id`,`createdAt`,`updatedAt`) VALUES (DEFAULT,?,?,?,?,?,?,?); - parameters:['pending','minsa@gmail.com','nima','3e331db7-dbb3-4022-a2b3-db5ed11df561','','2022-04-09 09:1...]
+
+Error [4/14/2022, 12:41:58 PM]
+ 	 - TypeError: Cannot read property 'data' of undefined
+
+Error [4/14/2022, 12:43:07 PM]
+ 	 - TypeError: Cannot read property 'data' of undefined
+
+Error [4/14/2022, 12:44:41 PM]
+ 	 - TypeError: Cannot read property 'data' of undefined
