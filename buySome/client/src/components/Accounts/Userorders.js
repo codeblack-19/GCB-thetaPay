@@ -57,12 +57,14 @@ export default function Userorders() {
                     'authorization': `Bearer ${cus.access_token}`
                 }
             }).then((res) => {
-                fetchOrders();
                 setmsg(res.data.message);
                 setloading(false);
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1500)
             }).catch((e) => {
-                setloading(true);
-                console.log(e);
+                setloading(false);
+                setmsg("An error occured please try again")
             })
         }
     }
