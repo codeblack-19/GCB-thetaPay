@@ -83,7 +83,7 @@
         }
 
         // transaction notification
-        public function transactionNotify($user, $txn, $type){
+        public function transactionNotify($user, $txn, $type, $amount){
             $mail = new PHPMailer\PHPMailer\PHPMailer();
 
             //Server settings   
@@ -168,7 +168,7 @@
                                         <font color="00597c" size="2" face="Verdana, Arial, Helvetica, sans-serif"><b>Amount:</b></font>
                                     </td>
                                     <td width="320" align="right" valign="center">
-                                        <font color="00597c" size="2" face="Verdana, Arial, Helvetica, sans-serif"> GHS '.$txn['amount'].'&nbsp;&nbsp;
+                                        <font color="00597c" size="2" face="Verdana, Arial, Helvetica, sans-serif"> GHS '.$amount.'&nbsp;&nbsp;
                                         </font>
                                     </td>
                                 </tr>

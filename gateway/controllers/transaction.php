@@ -150,6 +150,8 @@
         $txn->txn_id = $txnArr['txn_id'] ?? '';
         $txn_info = $txn->getTxnById();
 
+        $chargeAmt = $txn_info['amount'] - ($txn_info['amount'] * chargePercent);
+
         // validate token first
         if(!$txnArr){
             http_response_code(400);
@@ -174,6 +176,7 @@
         $account->pinCode = (int)$reqbody['pinCode'];
         $accInfo = $account->getAcctById();
         $mail = new MailingService;
+        $bank = new BankCard;
 
         if(empty($accInfo)){
             http_response_code(400);
@@ -191,8 +194,12 @@
             http_response_code(400);
             echo json_encode(array("error" => "Insufficient balance "));
             return;
-        }else if($txn->creditAccount($txn_info['amount'], $txn_info['accountNo']) && $txn->debitAccount($txn_info['amount'], $reqbody['accountNo']) && 
-            $txn->insertIntoTransfer()){
+        }else if(
+            $txn->creditAccount($chargeAmt, $txn_info['accountNo']) && 
+            $txn->debitAccount($txn_info['amount'], $reqbody['accountNo']) && 
+            $bank->creditMainAcct($txn_info['amount']) &&
+            $txn->insertIntoTransfer()
+        ){
             $account1 = new Account;
             $account1->accountNo = $txn_info['accountNo'];
             $account1Info = $account1->getAcctById();
@@ -203,12 +210,17 @@
             $txn->updateTxnStat();
             $txn->updateTxnMedium();
 
-            if($txn->sendRespondsToWebhook($txn_info['webhook']) && $mail->transactionNotify($accInfo, $txn_info, 'Debit') && $mail->transactionNotify($account1Info, $txn_info, 'Credit')){
+            if(
+                $txn->sendRespondsToWebhook($txn_info['webhook']) && 
+                $mail->transactionNotify($accInfo, $txn_info, 'Debit', $txn_info['amount']) &&
+                $mail->transactionNotify($account1Info, $txn_info, 'Credit', $chargeAmt)
+            ){
                 echo json_encode(array("message" => "Transactions completed successfully"));
                 return;
             }else{
-                $txn->debitAccount($txn_info['amount'], $txn_info['accountNo']);
+                $txn->debitAccount($chargeAmt, $txn_info['accountNo']);
                 $txn->creditAccount($txn_info['amount'], $reqbody['accountNo']);
+                $bank->debitMainAcct($txn_info['amount']);
                 $txn->status = "failed";
                 $txn->updateTxnStat();
                 $txn->sendRespondsToWebhook($txn_info['webhook']);
@@ -217,8 +229,9 @@
                 return;
             }
         }else{
-            $txn->debitAccount($txn_info['amount'], $txn_info['accountNo']);
+            $txn->debitAccount($chargeAmt, $txn_info['accountNo']);
             $txn->creditAccount($txn_info['amount'], $reqbody['accountNo']);
+            $bank->debitMainAcct($txn_info['amount']);
             $txn->status = "failed";
             $txn->updateTxnStat();
             $txn->sendRespondsToWebhook($txn_info['webhook']);
@@ -266,6 +279,8 @@
         $txn->txn_id = $txnArr['txn_id'] ?? '';
         $txn_info = $txn->getTxnById();
 
+        $chargeAmt = $txn_info['amount'] - ($txn_info['amount'] * chargePercent);
+
         // validate token first
         if(!$txnArr){
             http_response_code(400);
@@ -309,18 +324,27 @@
             http_response_code(400);
             echo json_encode(array("error" => "Insufficient balance on card"));
             return;
-        }else if($card->debitACard($txn_info['amount']) && $card->creditAccount($txn_info['amount'], $txn_info['accountNo']) && $card->insertIntoCardPayment()){
+        }else if(
+            $card->debitACard($txn_info['amount']) && 
+            $card->creditAccount($chargeAmt, $txn_info['accountNo']) && 
+            $card->creditMainAcct($txn_info['amount']) &&
+            $card->insertIntoCardPayment()
+        ){
             $txn->status = "success";
             $txn->publicKey = $txn->encryptData($keys['publicKey']);
             $txn->updateTxnStat();
             $accInfo = $account->getAcctById();
             $txn->updateTxnMedium();
-            if($txn->sendRespondsToWebhook($txn_info['webhook']) && $mail->transactionNotify($accInfo, $txn_info, 'Credit')){
+            if(
+                $txn->sendRespondsToWebhook($txn_info['webhook']) && 
+                $mail->transactionNotify($accInfo, $txn_info, 'Credit', $chargeAmt)
+            ){
                 echo json_encode(array("message" => 'Transactions completed successfully'));
                 return;
             }else{
                 $card->creditCard($txn_info['amount']);
-                $card->debitAccount($txn_info['amount'], $txn_info['accountNo']);
+                $card->debitAccount($chargeAmt, $txn_info['accountNo']);
+                $card->debitMainAcct($txn_info['amount']);
                 $txn->status = "failed";
                 $txn->updateTxnStat();
                 $txn->sendRespondsToWebhook($txn_info['webhook']);
@@ -330,7 +354,8 @@
             }
         }else{
             $card->creditCard($txn_info['amount']);
-            $card->debitAccount($txn_info['amount'], $txn_info['accountNo']);
+            $card->debitAccount($chargeAmt, $txn_info['accountNo']);
+            $card->debitMainAcct($txn_info['amount']);
             $txn->status = "failed";
             $txn->updateTxnStat();
             $txn->sendRespondsToWebhook($txn_info['webhook']);
@@ -340,7 +365,6 @@
         }
         
     });
-
 
     // refund payment
     Route::base("$baseName/webpayment_refund", function(){
@@ -378,6 +402,8 @@
         $txn->txn_id = $reqbody['txn_id'];
         $txnInfo = $txn->getTxnById();
 
+        $chargeAmt = $txnInfo['amount'] - ($txnInfo['amount'] * chargePercent);
+
         if(empty($txnInfo)){
             http_response_code(400);
             echo json_encode(array("error" => 'No transaction with the ID = '.$reqbody['txn_id'].''));
@@ -410,9 +436,10 @@
                 $acct1_info['balance'] = $acct1_info['balance'] - $txnInfo['amount'];
                 if(
                     !empty($cardpayment) && 
-                    $card->creditCard($txnInfo['amount']) && 
-                    $txn->debitAccount($txnInfo['amount'], $txnInfo['accountNo']) &&
-                    $mail->transactionNotify($acct1_info, $txnInfo, 'Refund & Debit')
+                    $card->creditCard($chargeAmt) && 
+                    $txn->debitAccount($chargeAmt, $txnInfo['accountNo']) &&
+                    $card->debitMainAcct($chargeAmt) &&
+                    $mail->transactionNotify($acct1_info, $txnInfo, 'Refund & Debit', $chargeAmt)
                 ){
                     $txn->refundTxn();
                     echo json_encode(array("message" => 'Transaction has been refunded successfully'));
@@ -434,10 +461,10 @@
 
                 if(
                     !empty($txnTrans) &&
-                    $txn->debitAccount($txnInfo['amount'], $txnInfo['accountNo']) &&
-                    $txn->creditAccount($txnInfo['amount'], $acct2->accountNo) &&
-                    $mail->transactionNotify($acct1_info, $txnInfo, 'Refund & Debit') &&
-                    $mail->transactionNotify($acct2_info, $txnInfo, 'Refund & Credit')
+                    $txn->debitAccount($chargeAmt, $txnInfo['accountNo']) &&
+                    $txn->creditAccount($chargeAmt, $acct2->accountNo) &&
+                    $mail->transactionNotify($acct1_info, $txnInfo, 'Refund & Debit', $chargeAmt) &&
+                    $mail->transactionNotify($acct2_info, $txnInfo, 'Refund & Credit', $chargeAmt)
                 ){
                     $txn->refundTxn();
                     echo json_encode(array("message" => 'Transaction has been refunded successfully'));

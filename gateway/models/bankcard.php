@@ -10,6 +10,7 @@
         public $bankAcct_No;
         public $bankName;
         public $connect;
+        public $thetaBankNum = thetaBankNumber;
 
         function __construct(){
             require_once './db/config.php';
@@ -58,6 +59,33 @@
 
         public function creditCard($amount){
             $query = "UPDATE cards set balance = (balance + $amount) WHERE card_no ='$this->card_no';";
+            $result = mysqli_multi_query($this->connect, $query);
+
+            echo mysqli_error($this->connect);
+
+            if($result){
+                return true;
+            }else{
+                return false;
+            }     
+        }
+
+        // debit and credit thetaPay account
+        public function debitMainAcct($amount){
+            $query = "UPDATE cards set balance = (balance - $amount) WHERE bankAcct_No ='$this->thetaBankNum';";
+            $result = mysqli_multi_query($this->connect, $query);
+
+            echo mysqli_error($this->connect);
+
+            if($result){
+                return true;
+            }else{
+                return false;
+            }        
+        }
+
+        public function creditMainAcct($amount){
+            $query = "UPDATE cards set balance = (balance + $amount) WHERE bankAcct_No ='$this->thetaBankNum';";
             $result = mysqli_multi_query($this->connect, $query);
 
             echo mysqli_error($this->connect);
