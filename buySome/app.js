@@ -35,7 +35,7 @@ app.use(`${process.env.API_Version}/transactions`, transactions);
 
 //base url
 app.get(`${process.env.API_Version}/`, function (req, res) {
-    res.send("<h1>Backend is running</h1>");
+    res.send("<h1>API Backend is running</h1>");
 })
 
 app.get("*", (req, res) => {

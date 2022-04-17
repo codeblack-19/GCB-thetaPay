@@ -123,7 +123,9 @@ export default function CheckModal({cartProds}) {
         }).then((res) => {
             localStorage.removeItem("_txnId");
             setsuccess(res.data.message);
-            // window.location.reload();
+            setTimeout(() => {
+                window.location.reload();
+            }, 1500)
         }).catch((e) => {
             seterror('An error occured, please try again');
             if (e.response.data) {
