@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    var token = document.getElementsByTagName("script")[2].classList[0];
+    var token = document.getElementsByTagName("script")[3].classList[0];
     var editInfoFm = document.getElementById("editInfoFm");
     var changePinFm = document.getElementById("chPcFm");
     var formMessage = document.getElementById("_message");

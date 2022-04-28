@@ -1,18 +1,17 @@
 <?php 
 
     class Cryptography{
-        private $cipherMethod = 'aes-128-cbc-hmac-sha256';
-        private $secreteKey = '28e742c6077';
-        private $iv = '7f321d7f52c06e73';
+        private $cipherMethod = thetaCipherMethod;
+        private $iv = thetaIV;
 
-        public function encryptData($data){
-            $cipher = openssl_encrypt($data, $this->cipherMethod, $this->secreteKey, 0, $this->iv);
+        public function encryptData($data, $secreteKey){
+            $cipher = openssl_encrypt($data, $this->cipherMethod, $secreteKey, 0, $this->iv);
             return base64_encode($cipher);
         }
 
-        public function decryptData($data){
+        public function decryptData($data, $secreteKey){
             $decode = base64_decode($data);
-            $plainText = openssl_decrypt($decode, $this->cipherMethod, $this->secreteKey, 0, $this->iv);
+            $plainText = openssl_decrypt($decode, $this->cipherMethod, $secreteKey, 0, $this->iv);
             return $plainText;
         }
 
@@ -33,8 +32,8 @@
             return $this->uniqidReal($lenght);
         }
 
-        public function checkSignatureDate($signature){
-            $pain = $this->decryptData($signature);
+        public function checkSignatureDate($signature, $secreteKey){
+            $pain = $this->decryptData($signature, $secreteKey);
             $rawArray = json_decode($pain, true);
 
             if($rawArray['edt'] <= date('Y/m/d H:i:s')){

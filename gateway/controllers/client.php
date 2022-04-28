@@ -110,15 +110,61 @@
             return;
         }
 
-        $user = new User;
-        $decodetoken = json_decode($user->decryptData($_SESSION['user_token']), true);
+        $user = new AccountKeys;
+        $decodetoken = json_decode($user->decryptData($_SESSION['user_token'], thetaSecreteKey), true);
         $user->id = $decodetoken['uid'];
         $userInfo = $user->getSettingDataById();
-        $userInfo['secreteKey'] = $user->encryptData($userInfo['secreteKey']);
-        $userInfo['publicKey'] = $user->encryptData($userInfo['publicKey']);
+        $user->accountNo = $userInfo['accountNo'];
+        $keys = $user->getAcctKeys();
+
+        $userInfo['keys'] = $keys;
         $_GET['acct_data'] = $userInfo;
 
         ViewController::CreateView("client/settings");
+    });
+
+    Route::base("$baseName/deleteAppkeys", function(){
+        $middleware = new Middleware;
+        if(!$middleware->verifyCSToken()){
+            return;
+        }
+
+        header("Content-Type: application/json; charset=UTF-8");
+        if($_SERVER['REQUEST_METHOD'] != 'POST'){
+            http_response_code(400);
+            echo json_encode(array("error" => "Invalid request method"));
+            return;
+        }
+
+        // required body
+        $Requiredbody = array("keyId");
+        $reqbody = json_decode(file_get_contents('php://input'), true);
+        if(!$reqbody){
+            http_response_code(400);
+            echo json_encode(array("error" => "Invalid request data"));
+            return;
+        }
+
+        // validate request body
+        $checkValues = new Validator;
+        $holdChecks = $checkValues->validateBody($reqbody, $Requiredbody);
+        if(!empty($holdChecks)){
+            http_response_code(400);
+            echo json_encode($holdChecks);
+            return;
+        }
+
+        $acctKeys = new AccountKeys;
+        $acctKeys->id = $reqbody['keyId'];
+
+        if($acctKeys->deleteApiKey()){
+            echo json_encode(array('message'=> 'App keys deleted successfully'));
+            return;
+        }else{
+            http_response_code(500);
+            echo json_encode(array("error" => "An error occured please try again"));
+            return;
+        }
     });
 
     Route::base("$baseName/topup", function(){
@@ -195,7 +241,7 @@
                 $accInfo = $txn->getAcctById();
                 $card->insertIntoCardPayment();
 
-                if($mail->transactionNotify($accInfo, $txn_info, 'Credit')){
+                if($mail->transactionNotify($accInfo, $txn_info, 'Credit', $reqbody['amount'])){
                     echo json_encode(array("message" => 'Top up completed successfully'));
                     return;
                 }else{

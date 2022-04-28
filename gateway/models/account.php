@@ -8,8 +8,7 @@
         public $businessName;
         public $accountNo;
         public $secreteKey;
-        public $publicKey;
-        public $status = "unverified";
+        public $status = "notverified";
         public $user_id;
         public $connect;
 
@@ -27,7 +26,7 @@
                 return false;
             }
 
-            $query = "INSERT INTO accounts (pinCode, balance, businessName, secreteKey, publicKey, status, user_id) VALUES ('$this->pinCode', 0.0, '$this->businessName', '$this->secreteKey', '$this->publicKey','notverified', '$this->user_id')";
+            $query = "INSERT INTO accounts (pinCode, balance, businessName, secreteKey, status, user_id) VALUES ('$this->pinCode', 0.0, '$this->businessName', '$this->secreteKey', 'notverified', '$this->user_id')";
             $result = mysqli_query($this->connect, $query);
 
             if($result === true){
@@ -49,7 +48,7 @@
         }
 
         public function getAcctById(){
-            $query = "Select users.firstname, users.lastname, users.email, accounts.balance, accounts.pinCode, accounts.status, accounts.accountNo, accounts.businessName, accounts.publicKey from accounts, users Where accounts.user_id = users.id AND accounts.accountNo = '$this->accountNo'";
+            $query = "Select users.firstname, users.lastname, users.email, accounts.balance, accounts.pinCode, accounts.status, accounts.accountNo, accounts.businessName from accounts, users Where accounts.user_id = users.id AND accounts.accountNo = '$this->accountNo'";
             $result = mysqli_query($this->connect, $query);
             $row = mysqli_fetch_assoc($result);
 
@@ -78,7 +77,7 @@
         }
 
         public function findbySecreteKey(){
-            $query = "Select balance, status, accountNo, businessName, publicKey from accounts Where secreteKey = '$this->secreteKey'";
+            $query = "Select balance, status, accountNo, businessName from accounts Where secreteKey = '$this->secreteKey'";
             $result = mysqli_query($this->connect, $query);
             $row = mysqli_fetch_assoc($result);
 
@@ -86,7 +85,7 @@
         }
 
         public function getSecretekey(){
-            $query = "Select secreteKey from accounts Where user_id = '$this->user_id'";
+            $query = "Select secreteKey, accountNo from accounts Where user_id = '$this->user_id'";
             $result = mysqli_query($this->connect, $query);
             $row = mysqli_fetch_assoc($result);
 
@@ -94,7 +93,7 @@
         }
 
         public function getKeysByAcctNo(){
-            $query = "Select secreteKey, publicKey from accounts Where accountNo = '$this->accountNo'";
+            $query = "Select secreteKey from accounts Where accountNo = '$this->accountNo'";
             $result = mysqli_query($this->connect, $query);
             $row = mysqli_fetch_assoc($result);
 

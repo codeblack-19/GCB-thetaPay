@@ -8,6 +8,29 @@
     
     $baseName = '/transactions';
 
+    
+    // get transactions
+    Route::base("$baseName", function(){
+        $middleware = new Middleware;
+        if(!$middleware->verifySecreteKey()){
+            return;
+        }
+
+        header("Content-Type: application/json; charset=UTF-8");
+        if($_SERVER['REQUEST_METHOD'] != 'GET'){
+            http_response_code(400);
+            echo json_encode(array("error" => "Invalid request method"));
+            return;
+        }
+
+        $txn = new Transaction;
+        $txn->accountNo = $_GET['keyInfo']['accountNo'];
+        $txn = $txn->getTxnByAcctNo();
+
+        echo json_encode($txn);
+        return;
+    });
+
     // initiate web payment
     Route::base("$baseName/initiate_payment", function(){
         $middleware = new Middleware;
@@ -41,10 +64,12 @@
         }
 
         $txn = new Transaction;
-        $txn->accountNo = $_GET['acct']['accountNo'];
+        $txn->accountNo = $_GET['keyInfo']['accountNo'];
         $txn->currency = $reqbody['currency'];
         $txn->description = $reqbody['description'];
         $txn->webhook = $reqbody['webhook'];
+        $key = $txn->getKeysByAcctNo();
+        $txn->secreteKey = $key['secreteKey'];
         $txn->status = 'initiated';
         $txn->type = 'webpayment';
         $txn->convertAmt($reqbody['amount']);
@@ -94,7 +119,14 @@
         if(!$txnArr){
             ViewController::CreateViewWithParams("transactions/paymentpage?error=Invalid signature");
             return;
-        }else if($txn->checkSignatureDate($_GET['signature'])){
+        }
+
+        
+        $txnInfo = $txn->getTxnById();
+        $txn->accountNo = $txnInfo['accountNo'];
+        $S_key = $txn->getKeysByAcctNo();
+
+        if($txn->checkSignatureDate($_GET['signature'], $S_key['secreteKey'])){
             $txn->status = 'failed';
             if($txn->updateTxnStat()){
                 ViewController::CreateViewWithParams('transactions/paymentpage?error=Transaction signture has expired');
@@ -157,7 +189,15 @@
             http_response_code(400);
             echo json_encode(array("error" => "Invalid signature"));
             return;
-        }else if($txn->checkSignatureDate($reqbody['signature'])){
+        }
+        
+        $txn->accountNo = $txn_info['accountNo'];
+        $S_key = $txn->getKeysByAcctNo();
+        $accountKeys = new AccountKeys;
+        $accountKeys->accountNo = $txn_info['accountNo'];
+        $keys = $accountKeys->getAcctKeys();
+        
+        if($txn->checkSignatureDate($reqbody['signature'], $S_key['secreteKey'])){
             $txn->status = 'failed';
             if($txn->updateTxnStat()){
                 http_response_code(400);
@@ -200,18 +240,16 @@
             $bank->creditMainAcct($txn_info['amount']) &&
             $txn->insertIntoTransfer()
         ){
-            $account1 = new Account;
+            $account1 = new AccountKeys;
             $account1->accountNo = $txn_info['accountNo'];
             $account1Info = $account1->getAcctById();
             $accInfo = $account->getAcctById();
-            $keys = $account1->getKeysByAcctNo();
             $txn->status = "success";
-            $txn->publicKey = $txn->encryptData($keys['publicKey']);
             $txn->updateTxnStat();
             $txn->updateTxnMedium();
 
             if(
-                $txn->sendRespondsToWebhook($txn_info['webhook']) && 
+                $txn->sendRespondsToWebhook($txn_info['webhook'], $keys['publicKey']) && 
                 $mail->transactionNotify($accInfo, $txn_info, 'Debit', $txn_info['amount']) &&
                 $mail->transactionNotify($account1Info, $txn_info, 'Credit', $chargeAmt)
             ){
@@ -223,7 +261,7 @@
                 $bank->debitMainAcct($txn_info['amount']);
                 $txn->status = "failed";
                 $txn->updateTxnStat();
-                $txn->sendRespondsToWebhook($txn_info['webhook']);
+                $txn->sendRespondsToWebhook($txn_info['webhook'], $keys['publicKey']);
                 http_response_code(500);
                 echo json_encode(array("error" => "An error occured please try again"));
                 return;
@@ -234,7 +272,7 @@
             $bank->debitMainAcct($txn_info['amount']);
             $txn->status = "failed";
             $txn->updateTxnStat();
-            $txn->sendRespondsToWebhook($txn_info['webhook']);
+            $txn->sendRespondsToWebhook($txn_info['webhook'], $keys['publicKey']);
             http_response_code(500);
             echo json_encode(array("error" => "An error occured please try again"));
             return;
@@ -286,7 +324,15 @@
             http_response_code(400);
             echo json_encode(array("error" => "Invalid signature"));
             return;
-        }else if($txn->checkSignatureDate($reqbody['signature'])){
+        }
+
+        $txn->accountNo = $txn_info['accountNo'];
+        $S_key = $txn->getKeysByAcctNo();
+        $accountKeys = new AccountKeys;
+        $accountKeys->accountNo = $txn_info['accountNo'];
+        $keys = $accountKeys->getAcctKeys();
+        
+        if($txn->checkSignatureDate($reqbody['signature'], $S_key['secreteKey'])){
             $txn->status = 'failed';
             if($txn->updateTxnStat()){
                 http_response_code(400);
@@ -331,12 +377,11 @@
             $card->insertIntoCardPayment()
         ){
             $txn->status = "success";
-            $txn->publicKey = $txn->encryptData($keys['publicKey']);
             $txn->updateTxnStat();
             $accInfo = $account->getAcctById();
             $txn->updateTxnMedium();
             if(
-                $txn->sendRespondsToWebhook($txn_info['webhook']) && 
+                $txn->sendRespondsToWebhook($txn_info['webhook'], $keys['publicKey']) && 
                 $mail->transactionNotify($accInfo, $txn_info, 'Credit', $chargeAmt)
             ){
                 echo json_encode(array("message" => 'Transactions completed successfully'));
@@ -347,7 +392,7 @@
                 $card->debitMainAcct($txn_info['amount']);
                 $txn->status = "failed";
                 $txn->updateTxnStat();
-                $txn->sendRespondsToWebhook($txn_info['webhook']);
+                $txn->sendRespondsToWebhook($txn_info['webhook'], $keys['publicKey']);
                 http_response_code(500);
                 echo json_encode(array("error" => "An error occured please try again"));
                 return;
@@ -358,7 +403,7 @@
             $card->debitMainAcct($txn_info['amount']);
             $txn->status = "failed";
             $txn->updateTxnStat();
-            $txn->sendRespondsToWebhook($txn_info['webhook']);
+            $txn->sendRespondsToWebhook($txn_info['webhook'], $keys['publicKey']);
             http_response_code(500);
             echo json_encode(array("error" => "An error occured please try again"));
             return;
@@ -480,4 +525,5 @@
         }
 
     });
+
 ?>

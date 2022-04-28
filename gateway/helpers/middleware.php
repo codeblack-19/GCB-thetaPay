@@ -1,7 +1,7 @@
 <?php 
-    require_once './models/account.php';
+    require_once './models/accountKeys.php';
 
-    class Middleware extends Account{
+    class Middleware extends AccountKeys{
 
         public function verifyCSToken(){
             header("Content-Type: application/json; charset=UTF-8");
@@ -16,7 +16,7 @@
                     return false;
                 }
 
-                $decode = json_decode($this->decryptData($token), true);
+                $decode = json_decode($this->decryptData($token, thetaSecreteKey), true);
 
                 if(isset($decode['uid'])){
                     if($decode['edt'] <= date('Y/m/d H:i:s')){
@@ -44,15 +44,24 @@
             header("Content-Type: application/json; charset=UTF-8");
             if(isset($_SERVER['HTTP_AUTHORIZATION']) && !empty($_SERVER['HTTP_AUTHORIZATION'])){
                 $token = explode(" ", $_SERVER['HTTP_AUTHORIZATION'])[1];
-                $decode = $this->decryptData($token);
 
-                if($decode){
-                    $this->secreteKey = $decode;
-                    $account = $this->findbySecreteKey();
+                if($token){
+                    $this->apiKey = $token;
+                    $keyInfo = $this->getKeyByApiKey();
                     
                     // find secrete key
-                    if(!empty($account)){
-                        $_GET['acct'] = $account;
+                    if(!empty($keyInfo)){
+                        $this->accountNo = $keyInfo['accountNo'];
+                        $S_Key = $this->getKeysByAcctNo();
+
+                        if($this->checkSignatureDate($token, $S_Key['secreteKey'])){
+                            http_response_code(401);
+                            echo json_encode(array("error" => "API key has expired please generate a new key"));
+                            return false;
+                        }
+
+                        $keyInfo['secreteKey'] = $S_Key['secreteKey'];
+                        $_GET['keyInfo'] = $keyInfo;
                         return true;
                     }else{
                         http_response_code(401);
@@ -72,6 +81,8 @@
                 return false;
             }
         }
+
+
     }
 
 ?>

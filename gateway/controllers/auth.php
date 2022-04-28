@@ -47,7 +47,6 @@
         $account->pinCode = password_hash($reqbody["pinCode"], PASSWORD_BCRYPT);
         $account->authToken = $account->VerificationToken();
         $account->secreteKey =  $account->generateId(32);
-        $account->publicKey = $account->generateId(32);
 
         $signUpmail = new MailingService;
 
@@ -120,7 +119,7 @@
         if($accountInfo['status'] === 'verified'){
             ViewController::CreateViewWithParams('auth/verifyAccount?error=Account is already verified');
             return;
-        }else if($account->checkSignatureDate($_GET['signature'])){
+        }else if($account->checkSignatureDate($_GET['signature'], thetaSecreteKey)){
             ViewController::CreateViewWithParams('auth/verifyAccount?error=Verification signture has expired');
             return;
         }else if($user->deleteAuthToken() && $account->verifyAccount()){
@@ -276,7 +275,7 @@
             }else if($userInfo['authToken'] != $_GET['signature']){
                 ViewController::CreateViewWithParams('auth/changepassword?error=Invalid signature');
                 return;
-            }else if($user->checkSignatureDate($_GET['signature'])){
+            }else if($user->checkSignatureDate($_GET['signature'], thetaSecreteKey)){
                 ViewController::CreateViewWithParams('auth/changepassword?error=Signture has expired');
                 return;
             }else{
@@ -323,7 +322,7 @@
                 http_response_code(400);
                 echo json_encode(array("error" => "Invalid signature"));
                 return;
-            }else if($user->checkSignatureDate($reqbody['signature'])){
+            }else if($user->checkSignatureDate($reqbody['signature'], thetaSecreteKey)){
                 http_response_code(400);
                 echo json_encode(array("error" => "Signture has expired"));
                 return;

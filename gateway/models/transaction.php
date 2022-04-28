@@ -110,11 +110,11 @@
         public function getTxnToken(){
             $today = date('Y/m/d H:i:s');
             $body = array("txn_id" => $this->txn_id, "cdt" => $today, "edt" => date('Y/m/d H:i:s', strtotime( $today. " + 60 minute")));
-            return $this->encryptData(json_encode($body));
+            return $this->encryptData(json_encode($body), $this->secreteKey);
         }
 
         public function decodeTxnToken(){
-            $decode = $this->decryptData($this->txn_token);
+            $decode = $this->decryptData($this->txn_token, $this->secreteKey);
             $rawArr = json_decode($decode, true);
 
             if($rawArr){
@@ -170,7 +170,7 @@
         }
 
         // send transaction info to webhook
-        public function sendRespondsToWebhook($url){
+        public function sendRespondsToWebhook($url, $publicKey){
             $data = array("txn_id" => $this->txn_id, "status" => $this->status, "date" => date('Y/m/d H:i:s'));
             $ch = curl_init($url);
             curl_setopt($ch, CURLOPT_POST, 1);
@@ -178,7 +178,7 @@
             curl_setopt($ch, CURLOPT_HTTPHEADER, 
                 array(
                     'Content-Type: application/json',
-                    'Authorization: Bearer '.$this->publicKey.''
+                    'Authorization: Bearer '.$publicKey.''
                 ) 
             );
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
