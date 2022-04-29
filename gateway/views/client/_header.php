@@ -51,6 +51,7 @@
                                         <a href="/GCB-thetaPay/gateway/client/signup" class="btn btn-warning me-3"> Sign up</a>';
                             }else{
                                 echo '<a href="/GCB-thetaPay/gateway/client/topup" class="btn btn-light px-3 me-3"> Top up </a>
+                                <a href="/GCB-thetaPay/gateway/client/cashout" class="btn btn-warning px-3 me-3"> Cashout </a>
                                 <a id="logoutBtn" class="btn btn-dark px-3 me-2"> logout </a>';
                             }
                         

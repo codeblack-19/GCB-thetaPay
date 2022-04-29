@@ -69,7 +69,7 @@
         }
 
         public function getAccountbyUserId(){
-            $query = "Select balance, status, accountNo, businessName from accounts Where user_id = '$this->user_id'";
+            $query = "Select balance, status, pinCode, accountNo, businessName from accounts Where user_id = '$this->user_id'";
             $result = mysqli_query($this->connect, $query);
             $row = mysqli_fetch_assoc($result);
 

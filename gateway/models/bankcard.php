@@ -28,6 +28,15 @@
             return $row;
         }
 
+        // get bankCard by cardno
+        public function getCardByBankAcctNo(){
+            $query = "Select * from cards Where bankAcct_No = '$this->bankAcct_No'";
+            $result = mysqli_query($this->connect, $query);
+            $row = mysqli_fetch_assoc($result);
+
+            return $row;
+        }
+
         // validate cardinfo
         public function validateCardParam($cardInfo, $reqBody){
             if($cardInfo["holder_name"] != $reqBody["name"]){

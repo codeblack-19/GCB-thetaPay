@@ -88,7 +88,14 @@
                     <div class="text-white banner-text">
                         <h1 class="mb-2">Welcome to GCB-thetaPay</h1>
                         <h4 class="mb-3">"...we occupy all angles of payment"</h4>
-                        <a class="btn btn-outline-light btn-lg" href="/GCB-thetaPay/gateway/client/signup" role="button">Sign Up Now</a>
+                        <?php 
+                            if(isset($_SESSION["user_token"])){
+                                echo ' <a href="/GCB-thetaPay/gateway/client/dashboard" class="btn btn-outline-light btn-lg"> Go To Dashboard</a>';
+                            }else{
+                                echo '<a class="btn btn-outline-light btn-lg" href="/GCB-thetaPay/gateway/client/signup" role="button">Sign Up Now</a>';
+                            }
+                        ?>
+                        
                     </div>
                 </div>
             </div>

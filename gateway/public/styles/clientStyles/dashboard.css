@@ -72,8 +72,7 @@ body::-webkit-scrollbar-thumb {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 18%;
-    
+    margin-top: 13%;
 }
 
 ._tp_holder ._tp_fm_bx{
@@ -104,6 +103,24 @@ body::-webkit-scrollbar-thumb {
     background-color: var(--mC-gcb);
     color: rgba(10, 10, 10);
     width: 100%;
+}
+
+/* checkout styles */
+._chout_bx{
+    min-width: 23rem;
+}
+.selectBox select{
+    width: 100%;
+    font-size: 1rem;
+    line-height: 2.15;
+    padding: 12px 0.75em;
+    border-radius: 5px;
+    border: 1px solid #bdbdbd;
+    color: #4f4f4f;
+}
+
+.selectBox select:focus{
+    outline: inherit;
 }
 
 /* account settings */
