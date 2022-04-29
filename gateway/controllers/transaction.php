@@ -24,7 +24,9 @@
         }
 
         $txn = new Transaction;
-        $txn->accountNo = $_GET['keyInfo']['accountNo'];
+        $txn->user_id = $_GET['uid'];
+        $accountInfo = $txn->getAccountbyUserId();
+        $txn->accountNo = $accountInfo['accountNo'];
         $txn = $txn->getTxnByAcctNo();
 
         echo json_encode($txn);
@@ -78,7 +80,7 @@
         
         if($txn->saveInitPaymentTxn()){
             $today = date('Y/m/d H:i:s');
-            $link = 'http://localhost/GCB-thetaPay/gateway/transactions/paymentpage?signature='.$txn->txn_token.'';
+            $link = 'http://localhost/GCB-thetaPay/gateway/transactions/paymentpage?signature='.$txn->txn_token.'&_id='.$_GET['keyInfo']['id'].'';
             echo json_encode(array("link"=> "$link", "message"=>"Payment initiated successfully", "txn_id" => "$txn->txn_id", "edt" => date('Y/m/d H:i:s', strtotime( $today. " + 60 minute"))));
             return;
         }else{
@@ -97,7 +99,7 @@
         }
 
         // required query strings
-        $requiredquery = array("signature");
+        $requiredquery = array("signature", "_id");
         $queryStrings = array();
         parse_str($_SERVER['QUERY_STRING'], $queryStrings);
 
@@ -110,8 +112,15 @@
             return;
         }
 
+        $acctkeys = new AccountKeys;
+        $acctkeys->id = $_GET['_id'];
+        $keys = $acctkeys->getAcctKeysById();
+
         $txn = new Transaction;
         $txn->txn_token = $_GET['signature'];
+        $txn->accountNo = $keys['accountNo'];
+        $sKey = $txn->getKeysByAcctNo();
+        $txn->secreteKey = $sKey['secreteKey'];
         $txn->status = 'pending';
         $txnArr = $txn->decodeTxnToken();
         $txn->txn_id = $txnArr['txn_id'] ?? '';
@@ -119,14 +128,7 @@
         if(!$txnArr){
             ViewController::CreateViewWithParams("transactions/paymentpage?error=Invalid signature");
             return;
-        }
-
-        
-        $txnInfo = $txn->getTxnById();
-        $txn->accountNo = $txnInfo['accountNo'];
-        $S_key = $txn->getKeysByAcctNo();
-
-        if($txn->checkSignatureDate($_GET['signature'], $S_key['secreteKey'])){
+        }else if($txn->checkSignatureDate($_GET['signature'], $sKey['secreteKey'])){
             $txn->status = 'failed';
             if($txn->updateTxnStat()){
                 ViewController::CreateViewWithParams('transactions/paymentpage?error=Transaction signture has expired');
@@ -157,7 +159,7 @@
         }
 
         // expected body
-        $Requiredbody = array("accountNo", "pinCode", "signature");
+        $Requiredbody = array("accountNo", "pinCode", "signature", "_id");
         $reqbody = json_decode(file_get_contents('php://input'), true);
         if(!$reqbody){
             http_response_code(400);
@@ -173,9 +175,16 @@
             echo json_encode($holdChecks);
             return;
         }
+
+        $acctkeys = new AccountKeys;
+        $acctkeys->id = $reqbody['_id'];
+        $keys = $acctkeys->getAcctKeysById();
         
         $txn = new Transaction;
         $txn->txn_token = $reqbody['signature'];
+        $txn->accountNo = $keys['accountNo'];
+        $sKey = $txn->getKeysByAcctNo();
+        $txn->secreteKey = $sKey['secreteKey'];
         $txnArr = $txn->decodeTxnToken();
         $txn->medium = 'internal';
         $txn->recipient_acctNo = $reqbody['accountNo'];
@@ -189,15 +198,7 @@
             http_response_code(400);
             echo json_encode(array("error" => "Invalid signature"));
             return;
-        }
-        
-        $txn->accountNo = $txn_info['accountNo'];
-        $S_key = $txn->getKeysByAcctNo();
-        $accountKeys = new AccountKeys;
-        $accountKeys->accountNo = $txn_info['accountNo'];
-        $keys = $accountKeys->getAcctKeys();
-        
-        if($txn->checkSignatureDate($reqbody['signature'], $S_key['secreteKey'])){
+        }else if($txn->checkSignatureDate($reqbody['signature'], $sKey['secreteKey'])){
             $txn->status = 'failed';
             if($txn->updateTxnStat()){
                 http_response_code(400);
@@ -277,8 +278,6 @@
             echo json_encode(array("error" => "An error occured please try again"));
             return;
         }
-
-
     });
 
     // card payment 
@@ -292,7 +291,7 @@
         }
 
         // expected body
-        $Requiredbody = array("name", "cardNo", "cvv", "expiry_mm", "expiry_yy", "signature");
+        $Requiredbody = array("name", "cardNo", "cvv", "expiry_mm", "expiry_yy", "signature", "_id");
         $reqbody = json_decode(file_get_contents('php://input'), true);
         if(!$reqbody){
             http_response_code(400);
@@ -309,8 +308,15 @@
             return;
         }
 
+        $acctkeys = new AccountKeys;
+        $acctkeys->id = $reqbody['_id'];
+        $keys = $acctkeys->getAcctKeysById();
+
         $txn = new Transaction;
         $txn->txn_token = $reqbody['signature'];
+        $txn->accountNo = $keys['accountNo'];
+        $sKey = $txn->getKeysByAcctNo();
+        $txn->secreteKey = $sKey['secreteKey'];
         $txnArr = $txn->decodeTxnToken();
         $txn->medium = 'card';
         $txn->cardNo = $reqbody['cardNo'];
@@ -324,15 +330,7 @@
             http_response_code(400);
             echo json_encode(array("error" => "Invalid signature"));
             return;
-        }
-
-        $txn->accountNo = $txn_info['accountNo'];
-        $S_key = $txn->getKeysByAcctNo();
-        $accountKeys = new AccountKeys;
-        $accountKeys->accountNo = $txn_info['accountNo'];
-        $keys = $accountKeys->getAcctKeys();
-        
-        if($txn->checkSignatureDate($reqbody['signature'], $S_key['secreteKey'])){
+        }else if($txn->checkSignatureDate($reqbody['signature'], $sKey['secreteKey'])){
             $txn->status = 'failed';
             if($txn->updateTxnStat()){
                 http_response_code(400);
@@ -349,7 +347,6 @@
         $card = new BankCard;
         $account = new Account;
         $account->accountNo = $txn_info['accountNo'];
-        $keys = $account->getKeysByAcctNo();
         $card->card_no = $reqbody['cardNo'];
         $card->txn_id = $txn_info['id'];
         $cardInfo = $card->getCardById();

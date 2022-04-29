@@ -40,6 +40,15 @@
             return $row;
         }
 
+        // get keys by accountNo
+        public function getAcctKeysById(){
+            $query = "Select * from account_keys Where id = '$this->id'";
+            $result = mysqli_query($this->connect, $query);
+            $row = mysqli_fetch_assoc($result);
+
+            return $row;
+        }
+
         // get api_key
         public function getKeyByApiKey(){
             $query = "Select * from account_keys Where apiKey = '$this->apiKey'";

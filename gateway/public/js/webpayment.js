@@ -23,7 +23,7 @@ function displayCardForm(){
                     </div>
                     <div class="field-container">
                         <label for="securitycode">CVV</label>
-                        <input id="securitycode" type="text" pattern="[0-9]*" maxlength="4" inputmode="numeric" placeholder="XXXX">
+                        <input id="securitycode" type="text" pattern="[0-9]*" maxlength="4" inputmode="numeric" placeholder="XXX">
                     </div>
                     <div class="btns">
                         <button type="submit" id="submitBtn">Submit</button>
@@ -98,6 +98,7 @@ function submitInterForm(e){
     FmBody['accountNo'] = interForm.elements['accountNo'].value;
     FmBody['pinCode'] = interForm.elements['pinCode'].value;
     FmBody['signature'] = new URLSearchParams(window.location.search).get('signature');
+    FmBody['_id'] = new URLSearchParams(window.location.search).get('_id');
 
     if(FmBody.accountNo == ""){
         return setformMessage("error", "Account Number is required");
@@ -145,6 +146,7 @@ function submitCreditCard(e){
     FmBody['expiry_yy'] = cardForm.elements['expiry_yy'].value;
     FmBody['cvv'] = cardForm.elements['securitycode'].value;
     FmBody['signature'] = new URLSearchParams(window.location.search).get('signature');
+    FmBody['_id'] = new URLSearchParams(window.location.search).get('_id');
 
     if(FmBody.name == ""){
         return setformMessage("error", "Card holder name is required");
