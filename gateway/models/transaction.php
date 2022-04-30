@@ -25,7 +25,7 @@
             $this->connect = $db_Object->connect();
         }
 
-
+        // save initial payment
         public function saveInitPaymentTxn(){
             $today = date('Y/m/d H:i:s');
             $query = "INSERT INTO transactions (id, status, amount, description, type, webhook, token, currency, accountNo,createdAt, updatedAt) VALUES ('$this->txn_id', '$this->status', $this->amount,'$this->description', '$this->type', '$this->webhook', '$this->txn_token', '$this->currency', $this->accountNo,'$today', '$today')";
@@ -37,6 +37,15 @@
             }else{
                 return false;
             }
+        }
+
+        // get all txns
+        public function getAllTxn(){
+            $query = "Select * from transactions";
+            $result = mysqli_query($this->connect, $query);
+            $row = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+            return $row;
         }
 
         // get txn by id
@@ -53,6 +62,15 @@
             $query = "Select * from transactions Where accountNo = '$this->accountNo'";
             $result = mysqli_query($this->connect, $query);
             $row = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+            return $row;
+        }
+
+        // get txn by accountNo and id
+        public function getTxnByAcctNoTxnId(){
+            $query = "Select * from transactions Where accountNo = '$this->accountNo' AND id = '$this->txn_id'";
+            $result = mysqli_query($this->connect, $query);
+            $row = mysqli_fetch_assoc($result);
 
             return $row;
         }

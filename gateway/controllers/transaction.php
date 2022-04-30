@@ -8,7 +8,6 @@
     
     $baseName = '/transactions';
 
-    
     // get transactions
     Route::base("$baseName", function(){
         $middleware = new Middleware;
@@ -24,10 +23,45 @@
         }
 
         $txn = new Transaction;
-        $txn->user_id = $_GET['uid'];
-        $accountInfo = $txn->getAccountbyUserId();
-        $txn->accountNo = $accountInfo['accountNo'];
+        $txn->accountNo = $_GET['keyInfo']['accountNo'];
         $txn = $txn->getTxnByAcctNo();
+
+        echo json_encode($txn);
+        return;
+    });
+
+    // get a single transaction
+    Route::base("$baseName/one", function(){
+        $middleware = new Middleware;
+        if(!$middleware->verifySecreteKey()){
+            return;
+        }
+
+        header("Content-Type: application/json; charset=UTF-8");
+        if($_SERVER['REQUEST_METHOD'] != 'GET'){
+            http_response_code(400);
+            echo json_encode(array("error" => "Invalid request method"));
+            return;
+        }
+
+        // required query strings
+        $requiredquery = array("txnId");
+        $queryStrings = array();
+        parse_str($_SERVER['QUERY_STRING'], $queryStrings);
+
+        // validate req queries
+        $validate = new Validator;
+        $holdValues = $validate->validateQueryStrings($queryStrings, $requiredquery);
+        if(!empty($holdValues)){
+            http_response_code(400);
+            echo json_encode($holdValues[0]);
+            return;
+        }
+
+        $txn = new Transaction;
+        $txn->accountNo = $_GET['keyInfo']['accountNo'];
+        $txn->txn_id = $_GET['txnId'];
+        $txn = $txn->getTxnByAcctNoTxnId();
 
         echo json_encode($txn);
         return;
@@ -523,4 +557,34 @@
 
     });
 
+    // cron api
+    Route::base("$baseName/8937583481436", function(){
+        header("Content-Type: application/json; charset=UTF-8");
+        if($_SERVER['REQUEST_METHOD'] != 'GET'){
+            http_response_code(400);
+            echo json_encode(array("error" => "Invalid request method"));
+            return;
+        }
+
+        $txn = new Transaction;
+        $allTxn = $txn->getAllTxn();
+
+        if(!empty($allTxn)){
+            foreach($allTxn as $value){
+                if($value['status'] == 'pending' || $value['status'] == 'initiated'){
+                    $txn->txn_id = $value['id'];
+                    $txn->accountNo = $value['accountNo'];
+                    $sKey = $txn->getKeysByAcctNo();
+                    $txn->secreteKey = $sKey['secreteKey'];
+
+                    if($txn->checkSignatureDate($value['token'], $txn->secreteKey)){
+                        $txn->status = 'failed';
+                        $txn->updateTxnStat();
+                    }
+                }
+            }
+        }
+
+        return;
+    });
 ?>
