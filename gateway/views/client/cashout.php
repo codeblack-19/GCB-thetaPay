@@ -45,7 +45,7 @@
                         <label class="form-label" for="pinCode">Pin Code</label>
                     </div>
                     <button class="btn tpbtn" id="submitBtn" type="submit">
-                        Top Up
+                        Cashout
                     </button>
                 </form>
             </div>

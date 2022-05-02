@@ -60,7 +60,7 @@ $(document).ready(function () {
 
     const stopLoading = () => {
         sbtBtn.removeAttribute("disabled");
-        sbtBtn.innerHTML = `login`
+        sbtBtn.innerHTML = `Top Up`
     }
 
 });
