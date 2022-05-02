@@ -79,7 +79,7 @@ export default function CheckModal({cartProds}) {
                 data: txnInfo,
                 headers: {
                     'Content-Type': 'application/json',
-                    "Authorization": `Bearer ${process.env.REACT_APP_GCB_THETAPAY_SECRETEKEY}`,
+                    "Authorization": `Bearer ${process.env.REACT_APP_GCB_THETAPAY_APIKEY}`,
                 },
             }).then((res) => {
                 let txn = res.data;
