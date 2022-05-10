@@ -22,7 +22,7 @@ $(document).ready(() => {
             success: function (response) {
                 num_txn.innerText = `${response.txn_num}`;
                 num_cus.innerText = `${response.num_cus}`;
-                txn_amt.innerText = `GHS ${parseFloat(response.txn_amt).toFixed(2).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}`
+                txn_amt.innerText = `GHS ${parseFloat(response.txn_amt ?? 0).toFixed(2).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}`
                 balance.innerText = `GHS ${parseFloat(response.balance).toFixed(2).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}`
             },
             error: function (XMLHttpRequest) {
