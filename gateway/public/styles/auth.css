@@ -57,8 +57,8 @@ main{
     margin: 10px 0 5px;
     font-size: 20px;
     border: 1px solid rgb(52, 92, 202);
-    background: rgb(52, 92, 202);
-    color: white;
+    background: var(--mC-gcb);
+    color: rgb(10, 10, 10);
     border-radius: 5px;
     cursor: pointer;
     transition: .5s;
@@ -66,8 +66,8 @@ main{
 
 .verify_notice a button:hover,
 .change_password form button:hover{
-    background-color: white;
-    color: rgb(52, 92, 202);
+    background-color: rgb(10, 10, 10);
+    color: var(--mC-gcb);
 }
 
 ._error{

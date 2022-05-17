@@ -101,7 +101,7 @@
         }
 
         public function getAccountSummary(){
-            $query = "SELECT (SELECT COUNT(*) from transactions WHERE transactions.accountNo = a.accountNo) as Num_txn, COALESCE(SUM(t.amount), 0.00) as txn_amount, COALESCE((a.balance), 0.00) as balance FROM transactions as t, accounts as a, users as u WHERE a.accountNo = t.accountNo AND a.accountNo = '$this->accountNo';";
+            $query = "SELECT (SELECT COUNT(*) from transactions WHERE transactions.accountNo = a.accountNo) as Num_txn, (SELECT COALESCE(SUM(transactions.amount), 0.00) from transactions WHERE transactions.accountNo = a.accountNo) as txn_amount, COALESCE((a.balance), 0.00) as balance FROM transactions as t, accounts as a WHERE a.accountNo = t.accountNo AND a.accountNo = '$this->accountNo';";
             
             $result = mysqli_query($this->connect, $query);
             $row = mysqli_fetch_assoc($result);

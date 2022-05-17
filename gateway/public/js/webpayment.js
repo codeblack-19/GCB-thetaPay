@@ -126,6 +126,9 @@ function submitInterForm(e){
                         </a>
                     </div>
                 `
+                setTimeout(() => {
+                    window.close();
+                }, 10000);
             }, error: function (XMLHttpRequest){
                 setformMessage("error", XMLHttpRequest.responseJSON.error);
             }
@@ -184,6 +187,9 @@ function submitCreditCard(e){
                         </a>
                     </div>
                 `
+                setTimeout(() => {
+                    window.close();
+                }, 10000);
             },
             error: function (XMLHttpRequest) {
                 setformMessage("error", XMLHttpRequest.responseJSON.error);

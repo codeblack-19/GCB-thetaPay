@@ -61,7 +61,7 @@
         // generate key
         public function generateApiKey(){
             $today = date('Y/m/d H:i:s');
-            $randomText = $this->generateId(5);
+            $randomText = $this->generateId(6);
             $body = array("accountNo" => $this->accountNo, "addon" => $randomText, "cdt" => $today, "edt" => date('Y/m/d H:i:s', strtotime( $today. " + 2 years")));
             $this->apiKey = $this->encryptData(json_encode($body), $this->secreteKey);
         }

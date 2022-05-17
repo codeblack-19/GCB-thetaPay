@@ -245,7 +245,7 @@
                 $accInfo = $txn->getAcctById();
                 $card->insertIntoCardPayment();
 
-                if($mail->transactionNotify($accInfo, $txn_info, 'Credit', $reqbody['amount'])){
+                if($mail->transactionNotify($accInfo, $txn_info, 'Credit', $reqbody['amount'], 0.00)){
                     echo json_encode(array("message" => 'Top up completed successfully'));
                     return;
                 }else{
@@ -355,7 +355,7 @@
                 $txn_info = $txn->getTxnById();
                 $accInfo = $txn->getAcctById();
 
-                if($mail->transactionNotify($accInfo, $txn_info, 'Cashout', $reqbody['amount'])){
+                if($mail->transactionNotify($accInfo, $txn_info, 'Cashout', $reqbody['amount'], 0.00)){
                     echo json_encode(array("message" => 'Cashout completed successfully'));
                     return;
                 }else{

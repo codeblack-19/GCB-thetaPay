@@ -285,8 +285,8 @@
 
             if(
                 $txn->sendRespondsToWebhook($txn_info['webhook'], $keys['publicKey']) && 
-                $mail->transactionNotify($accInfo, $txn_info, 'Debit', $txn_info['amount']) &&
-                $mail->transactionNotify($account1Info, $txn_info, 'Credit', $chargeAmt)
+                $mail->transactionNotify($accInfo, $txn_info, 'Debit', $txn_info['amount'], 0.00) &&
+                $mail->transactionNotify($account1Info, $txn_info, 'Credit', $chargeAmt, ($txn_info['amount'] * chargePercent))
             ){
                 echo json_encode(array("message" => "Transactions completed successfully"));
                 return;
@@ -413,7 +413,7 @@
             $txn->updateTxnMedium();
             if(
                 $txn->sendRespondsToWebhook($txn_info['webhook'], $keys['publicKey']) && 
-                $mail->transactionNotify($accInfo, $txn_info, 'Credit', $chargeAmt)
+                $mail->transactionNotify($accInfo, $txn_info, 'Credit', $chargeAmt, ($txn_info['amount'] * chargePercent))
             ){
                 echo json_encode(array("message" => 'Transactions completed successfully'));
                 return;
@@ -499,7 +499,7 @@
 
             if($acct1_info['balance'] < $txnInfo['amount']){
                 http_response_code(400);
-                echo json_encode(array("error" => 'Insuficient balance by to initiate refund'));
+                echo json_encode(array("error" => 'Insuficient balance to initiate refund'));
                 return;
             }
 
@@ -509,13 +509,13 @@
                 $card->card_no = $cardpayment['card_no'] ?? 0 ;
                 $mail = new MailingService;
 
-                $acct1_info['balance'] = $acct1_info['balance'] - $txnInfo['amount'];
+                $acct1_info['balance'] = $acct1_info['balance'] - $chargeAmt;
                 if(
                     !empty($cardpayment) && 
                     $card->creditCard($chargeAmt) && 
                     $txn->debitAccount($chargeAmt, $txnInfo['accountNo']) &&
                     $card->debitMainAcct($chargeAmt) &&
-                    $mail->transactionNotify($acct1_info, $txnInfo, 'Refund & Debit', $chargeAmt)
+                    $mail->transactionNotify($acct1_info, $txnInfo, 'Refund & Debit', $chargeAmt, 0.00)
                 ){
                     $txn->refundTxn();
                     echo json_encode(array("message" => 'Transaction has been refunded successfully'));
@@ -532,15 +532,15 @@
                 $acct2_info = $acct2->getAcctById();
                 $mail = new MailingService;
 
-                $acct1_info['balance'] = $acct1_info['balance'] - $txnInfo['amount'];
-                $acct2_info['balance'] = $acct2_info['balance'] + $txnInfo['amount'];
+                $acct1_info['balance'] = $acct1_info['balance'] - $chargeAmt;
+                $acct2_info['balance'] = $acct2_info['balance'] + $chargeAmt;
 
                 if(
                     !empty($txnTrans) &&
                     $txn->debitAccount($chargeAmt, $txnInfo['accountNo']) &&
                     $txn->creditAccount($chargeAmt, $acct2->accountNo) &&
-                    $mail->transactionNotify($acct1_info, $txnInfo, 'Refund & Debit', $chargeAmt) &&
-                    $mail->transactionNotify($acct2_info, $txnInfo, 'Refund & Credit', $chargeAmt)
+                    $mail->transactionNotify($acct1_info, $txnInfo, 'Refund & Debit', $chargeAmt, 0.00) &&
+                    $mail->transactionNotify($acct2_info, $txnInfo, 'Refund & Credit', $chargeAmt, ($txnInfo['amount'] * chargePercent))
                 ){
                     $txn->refundTxn();
                     echo json_encode(array("message" => 'Transaction has been refunded successfully'));
