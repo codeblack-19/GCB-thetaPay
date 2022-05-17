@@ -64,7 +64,10 @@ export default function Userorders() {
                 }, 1500)
             }).catch((e) => {
                 setloading(false);
-                setmsg("An error occured please try again")
+                setmsg('An error occured, please try again');
+                if (e.response.data) {
+                    return setmsg(e.response.data.error);
+                }
             })
         }
     }
