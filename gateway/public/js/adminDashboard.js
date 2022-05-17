@@ -58,13 +58,14 @@ $(document).ready(() => {
                                     ${data.status == "success" ? "badge-success" : "" }
                                     ${data.status == "failed" ? "badge-danger" : "" }
                                     ${data.status == "pending" ? "badge-warning" : "" } 
-                                    rounded-pill d-inline"
+                                    rounded-pill d-inline me-2"
                                 >
                                     ${data.status.toUpperCase()}
                                 </span>
+                                ${data.refunded == 1 ? '<span class="badge badge-info rounded-pill d-inline">Refunded</span>' : ''}
                             </td>
                             <td>${data.description}</td>
-                            <td>${data.medium.toUpperCase()}</td>
+                            <td>${data.medium ? data.medium.toUpperCase() : ""}</td>
                             <td>${new Date(data.createdAt).toUTCString()}</td>
                         </tr>`
                     )

@@ -203,12 +203,7 @@
             $result = curl_exec($ch);
             curl_close($ch);
 
-            if($result){
-                return true;
-            }else{
-                return false;
-            }
-
+            return true;
         }
 
         // get all user transactions

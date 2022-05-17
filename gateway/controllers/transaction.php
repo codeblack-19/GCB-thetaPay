@@ -425,7 +425,7 @@
                 $txn->updateTxnStat();
                 $txn->sendRespondsToWebhook($txn_info['webhook'], $keys['publicKey']);
                 http_response_code(500);
-                echo json_encode(array("error" => "An error occured please try again"));
+                echo json_encode(array("error" => "An error occured please try again, here"));
                 return;
             }
         }else{
