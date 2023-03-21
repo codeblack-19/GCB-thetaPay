@@ -5,6 +5,8 @@ A payment gateway for GCB for third-party integration as a coursework project. T
 
 This project was tested by integrating the developed API into an e-commerce application (`buysome`).  
 
+This project was done as a school project. 
+
 ## Objectives of the gateway
 
 * Ability to make web payments
